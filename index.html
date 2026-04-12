@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Airtime Deals Hub</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #121826;
+      --muted: #5b6475;
+      --accent: #1d4ed8;
+      --accent-2: #2563eb;
+      --success: #0f9d58;
+      --danger: #d93025;
+      --border: #e5eaf2;
+      --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1d4ed8, #60a5fa);
+      color: white;
+      border-radius: 28px;
+      padding: 28px 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.92);
+      line-height: 1.5;
+      max-width: 700px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+    }
+
+    .deal-btn {
+      border: 2px solid var(--border);
+      background: #fff;
+      border-radius: 18px;
+      padding: 16px 12px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      text-align: left;
+    }
+
+    .deal-btn:hover {
+      border-color: var(--accent-2);
+      transform: translateY(-2px);
+    }
+
+    .deal-btn.active {
+      border-color: var(--accent);
+      background: #eff6ff;
+    }
+
+    .deal-amount {
+      display: block;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .deal-price {
+      color: var(--success);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .deal-note {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 6px;
+    }
+
+    .small-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .small-tile {
+      border: 1px solid var(--border);
+      background: #fafcff;
+      border-radius: 14px;
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .small-tile:hover,
+    .small-tile.active {
+      background: #eaf2ff;
+      border-color: var(--accent);
+    }
+
+    form {
+      display: grid;
+      gap: 12px;
+    }
+
+    label {
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .summary {
+      background: #f8fbff;
+      border: 1px dashed #bfd4ff;
+      border-radius: 16px;
+      padding: 14px;
+      line-height: 1.7;
+      font-size: 0.95rem;
+      color: #1e3a8a;
+    }
+
+    .purchase-btn {
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      padding: 15px;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .purchase-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+    }
+
+    .purchase-btn:disabled {
+      opacity: 0.75;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .loader {
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255,255,255,0.35);
+      border-top: 3px solid #fff;
+      border-radius: 50%;
+      display: inline-block;
+      animation: spin 0.9s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 0.92rem;
+      display: none;
+    }
+
+    .status.success {
+      display: block;
+      background: #ecfdf3;
+      color: #146c43;
+      border: 1px solid #b7ebc6;
+    }
+
+    .status.error {
+      display: block;
+      background: #fff1f0;
+      color: #b42318;
+      border: 1px solid #f5c2c0;
+    }
+
+    .ref-box {
+      margin-top: 12px;
+      padding: 16px;
+      background: #111827;
+      color: #fff;
+      border-radius: 16px;
+      font-size: 1rem;
+      display: none;
+    }
+
+    .ref-box strong {
+      color: #93c5fd;
+    }
+
+    .note {
+      margin-top: 16px;
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 850px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 1.65rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Instant Airtime Deals</h1>
+      <p>Choose your airtime, enter the number, add cash-send details, and submit your request. Plus explore online trading services, artwork for sale, and forex signal packages in one polished hub.</p>
+    </section>
+
+    <section class="card" style="margin-bottom: 24px; border: 1px solid #c7dcff; background: linear-gradient(135deg, #eff6ff, #ffffff);">
+        <h2 class="section-title">Limited Promo</h2>
+        <div style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap:18px; align-items:center;">
+          <div>
+            <div style="font-size:1.35rem; font-weight:800; color:#0f172a; margin-bottom:8px;">R3000 Airtime for R2000</div>
+            <div style="color:#475569; line-height:1.6;">Special high-value promo with bundles included. Offer timer resets on page refresh for demo display.</div>
+          </div>
+          <div style="background:#0f172a; color:#fff; border-radius:20px; padding:18px; text-align:center;">
+            <div style="font-size:0.85rem; letter-spacing:1px; text-transform:uppercase; color:#93c5fd; margin-bottom:8px;">Offer ends in</div>
+            <div id="countdown" style="font-size:1.8rem; font-weight:800;">02:00:00</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-bottom:24px; background: linear-gradient(135deg, #ffffff, #f8fbff); border:1px solid #dbe7ff;">
+      <h2 class="section-title">Airtime Vault</h2>
+      <div style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:18px; align-items:start;">
+        <div>
+          <div style="font-size:1.35rem; font-weight:800; color:#0f172a; margin-bottom:10px;">Building a digital airtime and bundle hub</div>
+          <div style="color:#475569; line-height:1.7; font-size:0.96rem;">
+            Our aim is to provide reliable airtime and bundle services at scale through a growing vault of digital stock. We work with a team-focused model to build a central hub filled with airtime, MB bundles, trading services, and digital offers that can be resold to customers quickly and smoothly.
+          </div>
+          <div style="margin-top:14px; color:#334155; line-height:1.7; font-size:0.95rem;">
+            We aim to keep strong stock flow, improve customer reach, and create a reseller-friendly platform where team members can help move products faster across different markets.
+          </div>
+        </div>
+        <div style="display:grid; gap:12px;">
+          <div style="background:#0f172a; color:#fff; border-radius:18px; padding:16px;">
+            <div style="font-size:0.85rem; color:#93c5fd; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Vault Total</div>
+            <div style="font-size:1.5rem; font-weight:800;">R**** 5*****</div>
+          </div>
+          <div style="background:#eff6ff; color:#1e3a8a; border-radius:18px; padding:16px; border:1px solid #cfe0ff;">
+            <div style="font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Bundle Reserve</div>
+            <div style="font-size:1.3rem; font-weight:800;">MB bundles in stock</div>
+          </div>
+          <div style="background:#f8fafc; color:#334155; border-radius:18px; padding:16px; border:1px solid #e2e8f0;">
+            <div style="font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Team Mission</div>
+            <div style="font-size:1rem; font-weight:700;">Build, stock, resell, scale</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="card">
+        <h2 class="section-title">Main Airtime Deals</h2>
+        <div class="grid" id="mainDeals"></div>
+
+        <h2 class="section-title" style="margin-top: 22px;">Small Airtime Deals</h2>
+        <div class="small-grid" id="smallDeals"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="section-title">Purchase Airtime</h2>
+        <form id="purchaseForm">
+          <div>
+            <label for="network">Network</label>
+            <select id="network" required>
+              <option value="">Select network</option>
+              <option>Vodacom</option>
+              <option>MTN</option>
+              <option>Cell C</option>
+              <option>Telkom</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="e.g. 0821234567" required />
+          </div>
+
+          <div>
+            <label for="cashsend">Cash Send Number</label>
+            <input type="text" id="cashsend" placeholder="Enter cash send number" required />
+          </div>
+
+          <div>
+            <label for="pin">Cash Send PIN</label>
+            <input type="password" id="pin" placeholder="Enter PIN" required />
+          </div>
+
+          <div class="summary" id="summaryBox">
+            Selected deal: <strong>None</strong><br>
+            Price to pay: <strong>R0</strong>
+          </div>
+
+          <button class="purchase-btn" id="purchaseBtn" type="submit">Purchase Airtime</button>
+        </form>
+
+        <div class="status" id="statusBox"></div>
+        <div class="ref-box" id="refBox"></div>
+
+        <p class="note">This demo shows the purchase flow and generates a reference number on success. You can later connect it to WhatsApp, email, Telegram, or your own backend notification system.</p>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:24px;">
+      <h2 class="section-title">Online Trading Services</h2>
+      <div class="grid">
+        <div class="deal-btn" style="cursor:default;">
+          <span class="deal-amount">Forex Signal Service</span>
+          <span class="deal-price">From R65 per signal</span>
+          <span class="deal-note">Includes entry idea, stop loss, take profit, and PDF guide.</span>
+        </div>
+        <div class="deal-btn" style="cursor:default;">
+          <span class="deal-amount">Signal Bundle</span>
+          <span class="deal-price">Weekly access</span>
+          <span class="deal-note">For clients who want multiple setups and more coverage.</span>
+        </div>
+        <div class="deal-btn" style="cursor:default;">
+          <span class="deal-amount">Trading Education</span>
+          <span class="deal-price">Beginner friendly</span>
+          <span class="deal-note">Learn chart basics, risk control, and trade planning.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2 class="section-title">Artwork Catalog</h2>
+      <div class="grid">
+        <div class="deal-btn" style="cursor:default;">
+          <span class="deal-amount">Urban Gold</span>
+          <span class="deal-price">Original canvas</span>
+          <span class="deal-note">Modern abstract piece for office or home display.</span>
+        </div>
+        <div class="deal-btn" style="cursor:default;">
+          <span class="deal-amount">Midnight Bulls</span>
+          <span class="deal-price">Framed print</span>
+          <span class="deal-note">Finance-inspired wall art with bold motion.</span>
+        </div>
+        <div class="deal-btn" style="cursor:default;">
+          <span class="deal-amount">Signal Lines</span>
+          <span class="deal-price">Limited edition</span>
+          <span class="deal-note">Chart-inspired digital artwork for collectors.</span>
+        </div>
+      </div>
+      <div class="note">Tip: add real images later by replacing these cards with product photos and prices.</div>
+    </section>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const mainDeals = [
+      { amount: 500, price: 499 },
+      { amount: 600, price: 599 },
+      { amount: 700, price: 699 },
+      { amount: 800, price: 799 },
+      { amount: 900, price: 899 },
+      { amount: 1000, price: 999 }
+    ];
+
+    const smallDeals = [5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100].map(v => ({ amount: v, price: v - 1 }));
+
+    const mainDealsEl = document.getElementById('mainDeals');
+    const smallDealsEl = document.getElementById('smallDeals');
+    const summaryBox = document.getElementById('summaryBox');
+    const form = document.getElementById('purchaseForm');
+    const purchaseBtn = document.getElementById('purchaseBtn');
+    const statusBox = document.getElementById('statusBox');
+    const refBox = document.getElementById('refBox');
+
+    let selectedDeal = null;
+
+    function renderDeals() {
+      mainDeals.forEach((deal) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'deal-btn';
+        btn.innerHTML = `
+          <span class="deal-amount">R${deal.amount} Airtime</span>
+          <span class="deal-price">Pay R${deal.price}</span>
+          <span class="deal-note">Save R1 instantly</span>
+        `;
+        btn.addEventListener('click', () => selectDeal(deal, btn, 'main'));
+        mainDealsEl.appendChild(btn);
+      });
+
+      smallDeals.forEach((deal) => {
+        const tile = document.createElement('button');
+        tile.type = 'button';
+        tile.className = 'small-tile';
+        tile.textContent = `R${deal.amount} / R${deal.price}`;
+        tile.addEventListener('click', () => selectDeal(deal, tile, 'small'));
+        smallDealsEl.appendChild(tile);
+      });
+    }
+
+    function clearSelections() {
+      document.querySelectorAll('.deal-btn, .small-tile').forEach(el => el.classList.remove('active'));
+    }
+
+    function selectDeal(deal, element) {
+      clearSelections();
+      element.classList.add('active');
+      selectedDeal = deal;
+      summaryBox.innerHTML = `Selected deal: <strong>R${deal.amount} Airtime</strong><br>Price to pay: <strong>R${deal.price}</strong>`;
+      statusBox.className = 'status';
+      statusBox.style.display = 'none';
+      refBox.style.display = 'none';
+    }
+
+    function makeReference() {
+      const random = Math.floor(100000 + Math.random() * 900000);
+      return `AIR-${random}`;
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const network = document.getElementById('network').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const cashsend = document.getElementById('cashsend').value.trim();
+      const pin = document.getElementById('pin').value.trim();
+
+      statusBox.style.display = 'none';
+      refBox.style.display = 'none';
+
+      if (!selectedDeal) {
+        statusBox.className = 'status error';
+        statusBox.textContent = 'Please select an airtime deal first.';
+        return;
+      }
+
+      if (!network || !phone || !cashsend || !pin) {
+        statusBox.className = 'status error';
+        statusBox.textContent = 'Please complete all fields before purchasing.';
+        return;
+      }
+
+      purchaseBtn.disabled = true;
+      purchaseBtn.innerHTML = '<span class="loader"></span>This might take some time...';
+
+      setTimeout(() => {
+        const ref = makeReference();
+
+        statusBox.className = 'status success';
+        statusBox.textContent = `Purchase request submitted.`;
+
+        refBox.style.display = 'block';
+        refBox.innerHTML = `Reference Number: <strong>${ref}</strong>`;
+
+        // 🔥 Generate PDF automatically
+        const pdfContent = `
+FOREX SIGNAL RECEIPT
+
+Reference: ${ref}
+Network: ${network}
+Phone: ${phone}
+Deal: R${selectedDeal.amount}
+Price Paid: R${selectedDeal.price}
+
+--- SIGNAL DETAILS ---
+Pair: XAU/USD
+Direction: BUY
+Entry: 2325 - 2327
+Stop Loss: 2318
+Take Profit: 2334 / 2340
+
+This is a sample signal. Trade responsibly.
+`;
+
+        const blob = new Blob([pdfContent], { type: 'application/pdf' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `signal-${ref}.pdf`;
+        link.click();
+
+        purchaseBtn.disabled = false;
+        purchaseBtn.textContent = 'Purchase Airtime';
+
+        form.reset();
+        selectedDeal = null;
+        clearSelections();
+        summaryBox.innerHTML = 'Selected deal: <strong>None</strong><br>Price to pay: <strong>R0</strong>';
+      }, 3000);
+    });
+
+    function startCountdown(durationSeconds) {
+      const countdownEl = document.getElementById('countdown');
+      let timer = durationSeconds;
+
+      setInterval(() => {
+        const hours = String(Math.floor(timer / 3600)).padStart(2, '0');
+        const minutes = String(Math.floor((timer % 3600) / 60)).padStart(2, '0');
+        const seconds = String(timer % 60).padStart(2, '0');
+        if (countdownEl) countdownEl.textContent = `${hours}:${minutes}:${seconds}`;
+        timer = timer > 0 ? timer - 1 : durationSeconds;
+      }, 1000);
+    }
+
+    renderDeals();
+    startCountdown(7200);
+  </script>
+</body>
+</html>
