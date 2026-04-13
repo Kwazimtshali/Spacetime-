@@ -1,319 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Secure Login</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Secure Login</title>
 
-    body {
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #0b1f3a 0%, #0f3b6d 45%, #1f6fb2 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    .login-wrapper {
-      width: 100%;
-      max-width: 380px;
-    }
+body {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
 
-    .login-card {
-      background: #ffffff;
-      border-radius: 24px;
-      padding: 30px 24px 24px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
-      text-align: center;
-    }
+  /* 🔥 BANKING BACKGROUND */
+  background: 
+    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)),
+    url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d");
 
-    .bank-icon {
-      width: 84px;
-      height: 84px;
-      margin: 0 auto 18px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #00a651 0%, #1f6fb2 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 10px 25px rgba(31, 111, 178, 0.25);
-    }
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-    .bank-icon span {
-      font-size: 34px;
-      color: #fff;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
-    .title {
-      font-size: 26px;
-      font-weight: 700;
-      color: #0b1f3a;
-      margin-bottom: 8px;
-    }
+/* CARD */
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(6px);
+  border-radius: 24px;
+  padding: 30px 24px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  text-align: center;
+}
 
-    .subtitle {
-      font-size: 14px;
-      color: #6b7280;
-      margin-bottom: 24px;
-      line-height: 1.5;
-    }
+/* ICON */
+.bank-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00a651, #1f6fb2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: white;
+}
 
-    .input-group {
-      text-align: left;
-      margin-bottom: 16px;
-    }
+/* TEXT */
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #0b1f3a;
+}
 
-    .input-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: #0b1f3a;
-      margin-bottom: 8px;
-    }
+.subtitle {
+  font-size: 14px;
+  color: #555;
+  margin: 10px 0 20px;
+}
 
-    .input-group input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #d7deea;
-      border-radius: 14px;
-      font-size: 15px;
-      background: #f8fafc;
-      outline: none;
-      transition: 0.2s ease;
-    }
+/* INPUT */
+.input-group {
+  text-align: left;
+  margin-bottom: 15px;
+}
 
-    .input-group input:focus {
-      border-color: #1f6fb2;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(31, 111, 178, 0.12);
-    }
+.input-group label {
+  font-size: 13px;
+  font-weight: bold;
+}
 
-    .login-btn {
-      width: 100%;
-      border: none;
-      border-radius: 14px;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-      background: linear-gradient(90deg, #0b1f3a 0%, #1f6fb2 100%);
-      cursor: pointer;
-      margin-top: 6px;
-    }
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+}
 
-    .login-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
+/* BUTTON */
+.login-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(90deg, #0b1f3a, #1f6fb2);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
 
-    .helper-row {
-      margin-top: 16px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-size: 13px;
-    }
+.login-btn:hover {
+  opacity: 0.95;
+}
 
-    .helper-row a {
-      color: #1f6fb2;
-      text-decoration: none;
-      font-weight: 700;
-    }
+/* MESSAGE */
+.message {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: bold;
+}
 
-    .message {
-      margin-top: 14px;
-      min-height: 20px;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .footer-note {
-      text-align: center;
-      margin-top: 18px;
-      color: #eaf2ff;
-      font-size: 12px;
-    }
-
-    @media (max-width: 420px) {
-      .login-card {
-        padding: 26px 18px 20px;
-        border-radius: 20px;
-      }
-
-      .title {
-        font-size: 23px;
-      }
-    }
-  </style>
+.footer {
+  text-align: center;
+  margin-top: 15px;
+  color: #ddd;
+  font-size: 12px;
+}
+</style>
 </head>
+
 <body>
-  <div class="login-wrapper">
-    <div class="login-card">
-      <div class="bank-icon">
-        <span>🏦</span>
-      </div>
 
-      <h1 class="title">Secure Login</h1>
-      <p class="subtitle">Sign in to access your profile and continue safely.</p>
+<div class="login-card">
 
-      <form id="loginForm" novalidate>
-        <div class="input-group">
-          <label for="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Enter username"
-            maxlength="30"
-            minlength="3"
-            inputmode="text"
-            autocomplete="username"
-            spellcheck="false"
-            required
-          />
-        </div>
+  <div class="bank-icon">🏦</div>
 
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Enter password"
-            maxlength="64"
-            minlength="8"
-            autocomplete="current-password"
-            required
-          />
-        </div>
+  <div class="title">Secure Login</div>
+  <div class="subtitle">Access your account safely</div>
 
-        <button type="submit" class="login-btn" id="loginBtn">Login</button>
-      </form>
-
-      <div id="message" class="message"></div>
-
-      <div class="helper-row">
-        <a href="#">Forgot Username</a>
-        <a href="#">Forgot Password</a>
-      </div>
-    </div>
-
-    <div class="footer-note">
-      Protected access portal
-    </div>
+  <div class="input-group">
+    <label>Username</label>
+    <input type="text" id="username" maxlength="30">
   </div>
 
-  <script>
-    const loginForm = document.getElementById("loginForm");
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const message = document.getElementById("message");
-    const loginBtn = document.getElementById("loginBtn");
+  <div class="input-group">
+    <label>Password</label>
+    <input type="password" id="password" maxlength="64">
+  </div>
 
-    let failedAttempts = 0;
-    let lockUntil = 0;
+  <button class="login-btn" onclick="login()">Login</button>
 
-    function setMessage(text, color) {
-      message.textContent = text; // safer than innerHTML
-      message.style.color = color;
-    }
+  <div id="msg" class="message"></div>
 
-    function sanitizeUsername(value) {
-      return value.replace(/[^a-zA-Z0-9._-]/g, "").trim();
-    }
+</div>
 
-    function basicPasswordCheck(value) {
-      // do not over-sanitize passwords, just reject control chars
-      return !/[\u0000-\u001F\u007F]/.test(value);
-    }
+<div class="footer">
+  Protected banking environment
+</div>
 
-    function isLocked() {
-      return Date.now() < lockUntil;
-    }
+<script>
+function login() {
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+  const msg = document.getElementById("msg");
 
-    usernameInput.addEventListener("input", () => {
-      const cleaned = sanitizeUsername(usernameInput.value);
-      if (usernameInput.value !== cleaned) {
-        usernameInput.value = cleaned;
-      }
-    });
+  if (user === "admin" && pass === "SecurePass123") {
+    msg.style.color = "#00a651";
+    msg.innerText = "Login successful";
+  } else {
+    msg.style.color = "red";
+    msg.innerText = "Invalid credentials";
+  }
+}
+</script>
 
-    usernameInput.addEventListener("paste", (e) => {
-      e.preventDefault();
-      const pasted = (e.clipboardData || window.clipboardData).getData("text");
-      usernameInput.value = sanitizeUsername(pasted).slice(0, 30);
-    });
-
-    passwordInput.addEventListener("paste", (e) => {
-      const pasted = (e.clipboardData || window.clipboardData).getData("text");
-      if (/[\u0000-\u001F\u007F]/.test(pasted)) {
-        e.preventDefault();
-        setMessage("Unsafe characters blocked.", "#dc2626");
-      }
-    });
-
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      if (isLocked()) {
-        const seconds = Math.ceil((lockUntil - Date.now()) / 1000);
-        setMessage(`Too many attempts. Try again in ${seconds}s.`, "#dc2626");
-        return;
-      }
-
-      const username = sanitizeUsername(usernameInput.value);
-      const password = passwordInput.value;
-
-      if (username.length < 3 || username.length > 30) {
-        setMessage("Username must be 3 to 30 valid characters.", "#dc2626");
-        return;
-      }
-
-      if (!basicPasswordCheck(password)) {
-        setMessage("Password contains blocked characters.", "#dc2626");
-        return;
-      }
-
-      if (password.length < 8 || password.length > 64) {
-        setMessage("Password must be 8 to 64 characters.", "#dc2626");
-        return;
-      }
-
-      loginBtn.disabled = true;
-      setMessage("Checking credentials...", "#1f6fb2");
-
-      setTimeout(() => {
-        // demo-only check
-        if (username === "admin" && password === "SecurePass123") {
-          failedAttempts = 0;
-          setMessage("Login successful.", "#00a651");
-        } else {
-          failedAttempts += 1;
-          setMessage("Invalid username or password.", "#dc2626");
-
-          if (failedAttempts >= 2) {
-            lockUntil = Date.now() + 30000;
-            setMessage("Too many attempts. Locked for 30 seconds.", "#dc2626");
-          }
-        }
-
-        loginBtn.disabled = false;
-      }, 800);
-    });
-
-    document.addEventListener("contextmenu", (e) => {
-      // optional: light friction only, not real security
-      // e.preventDefault();
-    });
-  </script>
 </body>
 </html>
