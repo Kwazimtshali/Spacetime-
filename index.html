@@ -3,581 +3,705 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Airtime Deals Hub</title>
+  <title>Signals & Services Airtime Payment</title>
   <style>
-    :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --text: #121826;
-      --muted: #5b6475;
-      --accent: #1d4ed8;
-      --accent-2: #2563eb;
-      --success: #0f9d58;
-      --danger: #d93025;
-      --border: #e5eaf2;
-      --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
-      --radius: 20px;
-    }
-
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
     }
 
     body {
-      background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
-      color: var(--text);
-      min-height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #111;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: #111;
+      padding: 14px 10px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .nav button {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+
+    .nav button:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .page {
+      display: none;
       padding: 20px;
     }
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .hero {
-      background: linear-gradient(135deg, #1d4ed8, #60a5fa);
-      color: white;
-      border-radius: 28px;
-      padding: 28px 22px;
-      box-shadow: var(--shadow);
-      margin-bottom: 24px;
-    }
-
-    .hero h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-
-    .hero p {
-      color: rgba(255,255,255,0.92);
-      line-height: 1.5;
-      max-width: 700px;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1.2fr 0.9fr;
-      gap: 24px;
+    .page.active {
+      display: block;
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
+      max-width: 560px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 22px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 18px;
     }
 
     .section-title {
-      font-size: 1.2rem;
-      margin-bottom: 16px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+      font-size: 18px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 12px;
+    .product {
+      padding: 14px;
+      border: 1px solid #ddd;
+      margin: 10px 0;
+      border-radius: 12px;
+      background: #fafafa;
+      font-weight: 600;
+      line-height: 1.5;
     }
 
-    .deal-btn {
-      border: 2px solid var(--border);
-      background: #fff;
-      border-radius: 18px;
-      padding: 16px 12px;
-      cursor: pointer;
-      transition: 0.2s ease;
-      text-align: left;
-    }
-
-    .deal-btn:hover {
-      border-color: var(--accent-2);
-      transform: translateY(-2px);
-    }
-
-    .deal-btn.active {
-      border-color: var(--accent);
-      background: #eff6ff;
-    }
-
-    .deal-amount {
-      display: block;
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .deal-price {
-      color: var(--success);
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-
-    .deal-note {
-      display: block;
-      color: var(--muted);
-      font-size: 0.8rem;
-      margin-top: 6px;
-    }
-
-    .small-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .small-tile {
-      border: 1px solid var(--border);
-      background: #fafcff;
-      border-radius: 14px;
-      padding: 12px 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.2s ease;
-      font-size: 0.95rem;
-      font-weight: 700;
-    }
-
-    .small-tile:hover,
-    .small-tile.active {
-      background: #eaf2ff;
-      border-color: var(--accent);
-    }
-
-    form {
-      display: grid;
-      gap: 12px;
+    .highlight {
+      background: #111;
+      color: #fff;
+      border: none;
     }
 
     label {
-      font-size: 0.92rem;
-      font-weight: 700;
-      margin-bottom: 4px;
       display: block;
+      margin: 12px 0 6px;
+      font-weight: 600;
     }
 
-    input, select {
+    input, select, textarea {
       width: 100%;
-      padding: 14px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--border);
+      padding: 12px;
+      border: 1px solid #d8d8d8;
+      border-radius: 10px;
+      font-size: 15px;
       background: #fff;
-      font-size: 0.95rem;
-      outline: none;
     }
 
-    input:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-    }
-
-    .summary {
-      background: #f8fbff;
-      border: 1px dashed #bfd4ff;
-      border-radius: 16px;
-      padding: 14px;
-      line-height: 1.7;
-      font-size: 0.95rem;
-      color: #1e3a8a;
-    }
-
-    .purchase-btn {
+    .main-btn {
+      width: 100%;
+      padding: 13px;
+      margin-top: 14px;
+      background: #111;
+      color: #fff;
       border: none;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: white;
-      padding: 15px;
-      border-radius: 16px;
-      font-size: 1rem;
-      font-weight: 700;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.2s ease;
     }
 
-    .purchase-btn:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.02);
+    .main-btn:hover {
+      opacity: 0.95;
     }
 
-    .purchase-btn:disabled {
-      opacity: 0.75;
-      cursor: not-allowed;
-      transform: none;
+    .secondary-btn {
+      background: #2d6cdf;
     }
 
-    .loader {
-      width: 18px;
-      height: 18px;
-      border: 3px solid rgba(255,255,255,0.35);
-      border-top: 3px solid #fff;
-      border-radius: 50%;
+    .success,
+    .info-box,
+    .warning-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .success {
+      background: #e9fff0;
+      border: 1px solid #b8e8c6;
+      color: #155724;
+    }
+
+    .info-box {
+      background: #f1f5ff;
+      border: 1px solid #c7d7ff;
+      color: #1d3f8f;
+    }
+
+    .warning-box {
+      background: #fff8e6;
+      border: 1px solid #f0d88a;
+      color: #7a5a00;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 10px;
+      background: #fff8e6;
+      border: 1px solid #f0d88a;
+      color: #7a5a00;
+      font-weight: 600;
+    }
+
+    .spinner {
       display: inline-block;
-      animation: spin 0.9s linear infinite;
-      vertical-align: middle;
+      width: 16px;
+      height: 16px;
+      border: 3px solid #d9c27a;
+      border-top: 3px solid #7a5a00;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
       margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .services-list div {
+      padding: 12px;
+      background: #fafafa;
+      border: 1px solid #e3e3e3;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .vault {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+    }
+
+    .vault strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: #666;
+      font-size: 13px;
+      text-align: center;
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .status {
-      margin-top: 12px;
-      padding: 14px;
-      border-radius: 14px;
-      font-size: 0.92rem;
-      display: none;
-    }
-
-    .status.success {
-      display: block;
-      background: #ecfdf3;
-      color: #146c43;
-      border: 1px solid #b7ebc6;
-    }
-
-    .status.error {
-      display: block;
-      background: #fff1f0;
-      color: #b42318;
-      border: 1px solid #f5c2c0;
-    }
-
-    .ref-box {
-      margin-top: 12px;
-      padding: 16px;
-      background: #111827;
-      color: #fff;
-      border-radius: 16px;
-      font-size: 1rem;
-      display: none;
-    }
-
-    .ref-box strong {
-      color: #93c5fd;
-    }
-
-    .note {
-      margin-top: 16px;
-      font-size: 0.84rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    @media (max-width: 850px) {
-      .layout {
-        grid-template-columns: 1fr;
+      to {
+        transform: rotate(360deg);
       }
+    }
 
-      .hero h1 {
-        font-size: 1.65rem;
+    @media (max-width: 520px) {
+      .nav button {
+        font-size: 13px;
+        padding: 8px 10px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <section class="hero">
-      <h1>Instant Airtime Deals</h1>
-      <p>Choose your airtime, enter the number, add cash-send details, and submit your request. Plus explore online trading services, artwork for sale, and forex signal packages in one polished hub.</p>
-    </section>
 
-    <section class="card" style="margin-bottom: 24px; border: 1px solid #c7dcff; background: linear-gradient(135deg, #eff6ff, #ffffff);">
-        <h2 class="section-title">Limited Promo</h2>
-        <div style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap:18px; align-items:center;">
-          <div>
-            <div style="font-size:1.35rem; font-weight:800; color:#0f172a; margin-bottom:8px;">R3000 Airtime for R2000</div>
-            <div style="color:#475569; line-height:1.6;">Special high-value promo with bundles included. Offer timer resets on page refresh for demo display.</div>
-          </div>
-          <div style="background:#0f172a; color:#fff; border-radius:20px; padding:18px; text-align:center;">
-            <div style="font-size:0.85rem; letter-spacing:1px; text-transform:uppercase; color:#93c5fd; margin-bottom:8px;">Offer ends in</div>
-            <div id="countdown" style="font-size:1.8rem; font-weight:800;">02:00:00</div>
-          </div>
-        </div>
-      </section>
+  <div class="nav">
+    <button onclick="showPage('paymentPage')">Airtime Payment</button>
+    <button onclick="showPage('affiliatePage')">Affiliate</button>
+    <button onclick="showPage('learningPage')">VIP & Learning</button>
+    <button onclick="showPage('servicesPage')">Services</button>
+  </div>
 
-      <section class="card" style="margin-bottom:24px; background: linear-gradient(135deg, #ffffff, #f8fbff); border:1px solid #dbe7ff;">
-      <h2 class="section-title">Airtime Vault</h2>
-      <div style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:18px; align-items:start;">
-        <div>
-          <div style="font-size:1.35rem; font-weight:800; color:#0f172a; margin-bottom:10px;">Building a digital airtime and bundle hub</div>
-          <div style="color:#475569; line-height:1.7; font-size:0.96rem;">
-            Our aim is to provide reliable airtime and bundle services at scale through a growing vault of digital stock. We work with a team-focused model to build a central hub filled with airtime, MB bundles, trading services, and digital offers that can be resold to customers quickly and smoothly.
-          </div>
-          <div style="margin-top:14px; color:#334155; line-height:1.7; font-size:0.95rem;">
-            We aim to keep strong stock flow, improve customer reach, and create a reseller-friendly platform where team members can help move products faster across different markets.
-          </div>
-        </div>
-        <div style="display:grid; gap:12px;">
-          <div style="background:#0f172a; color:#fff; border-radius:18px; padding:16px;">
-            <div style="font-size:0.85rem; color:#93c5fd; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Vault Total</div>
-            <div style="font-size:1.5rem; font-weight:800;">R**** 5*****</div>
-          </div>
-          <div style="background:#eff6ff; color:#1e3a8a; border-radius:18px; padding:16px; border:1px solid #cfe0ff;">
-            <div style="font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Bundle Reserve</div>
-            <div style="font-size:1.3rem; font-weight:800;">MB bundles in stock</div>
-          </div>
-          <div style="background:#f8fafc; color:#334155; border-radius:18px; padding:16px; border:1px solid #e2e8f0;">
-            <div style="font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">Team Mission</div>
-            <div style="font-size:1rem; font-weight:700;">Build, stock, resell, scale</div>
-          </div>
-        </div>
+  <!-- AIRTIME PAYMENT PAGE -->
+  <div id="paymentPage" class="page active">
+    <div class="card">
+      <h1>Airtime for Services</h1>
+      <p class="subtitle">Clients send airtime as payment for services. The airtime goes to you and is used for signal services.</p>
+
+      <div class="warning-box">
+        <strong>Important:</strong><br>
+        This is not airtime sent to the client.<br>
+        This is airtime paid to the business owner for access to services.
       </div>
-    </section>
 
-    <div class="layout">
-      <section class="card">
-        <h2 class="section-title">Main Airtime Deals</h2>
-        <div class="grid" id="mainDeals"></div>
+      <h3 class="section-title">Available Service Payments</h3>
 
-        <h2 class="section-title" style="margin-top: 22px;">Small Airtime Deals</h2>
-        <div class="small-grid" id="smallDeals"></div>
-      </section>
+      <div class="product">
+        <strong>Forex Signals Access</strong><br>
+        Payment: <strong>R500 Airtime</strong><br>
+        Purpose: This R500 airtime payment is used for signals.
+      </div>
 
-      <section class="card">
-        <h2 class="section-title">Purchase Airtime</h2>
-        <form id="purchaseForm">
-          <div>
-            <label for="network">Network</label>
-            <select id="network" required>
-              <option value="">Select network</option>
-              <option>Vodacom</option>
-              <option>MTN</option>
-              <option>Cell C</option>
-              <option>Telkom</option>
-            </select>
-          </div>
+      <div class="product">
+        <strong>Single Signal</strong><br>
+        Payment: <strong>R65 Airtime</strong><br>
+        Purpose: Access to one forex signal.
+      </div>
 
-          <div>
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" placeholder="e.g. 0821234567" required />
-          </div>
+      <div class="product">
+        <strong>Online Trading Support</strong><br>
+        Payment: <strong>Custom Airtime</strong><br>
+        Purpose: Airtime-based support service.
+      </div>
 
-          <div>
-            <label for="cashsend">Cash Send Number</label>
-            <input type="text" id="cashsend" placeholder="Enter cash send number" required />
-          </div>
+      <div class="product">
+        <strong>Artwork Catalog Access</strong><br>
+        Payment: <strong>Custom Airtime</strong><br>
+        Purpose: Access to artwork or digital content.
+      </div>
 
-          <div>
-            <label for="pin">Cash Send PIN</label>
-            <input type="password" id="pin" placeholder="Enter PIN" required />
-          </div>
+      <div class="product highlight">
+        <strong>Main Offer</strong><br>
+        Send <strong>R500 airtime</strong> to receive signals service access.<br>
+        This payment is for <strong>you</strong>, not for the client.
+      </div>
 
-          <div class="summary" id="summaryBox">
-            Selected deal: <strong>None</strong><br>
-            Price to pay: <strong>R0</strong>
-          </div>
+      <h3 class="section-title">Submit Airtime Payment</h3>
 
-          <button class="purchase-btn" id="purchaseBtn" type="submit">Purchase Airtime</button>
-        </form>
+      <label for="clientName">Client Name</label>
+      <input type="text" id="clientName" placeholder="Enter client name" />
 
-        <div class="status" id="statusBox"></div>
-        <div class="ref-box" id="refBox"></div>
+      <label for="clientPhone">Client Phone Number</label>
+      <input type="text" id="clientPhone" placeholder="Enter client phone number" />
 
-        <p class="note">This demo shows the purchase flow and generates a reference number on success. You can later connect it to WhatsApp, email, Telegram, or your own backend notification system.</p>
-      </section>
+      <label for="network">Network</label>
+      <select id="network">
+        <option value="">Select network</option>
+        <option value="Vodacom">Vodacom</option>
+        <option value="MTN">MTN</option>
+        <option value="Cell C">Cell C</option>
+        <option value="Telkom">Telkom</option>
+      </select>
+
+      <label for="servicePackage">Service Package</label>
+      <select id="servicePackage">
+        <option value="">Choose service</option>
+        <option value="Forex Signals Access - R500 Airtime">Forex Signals Access - R500 Airtime</option>
+        <option value="Single Signal - R65 Airtime">Single Signal - R65 Airtime</option>
+        <option value="Online Trading Support - Custom Airtime">Online Trading Support - Custom Airtime</option>
+        <option value="Artwork Catalog Access - Custom Airtime">Artwork Catalog Access - Custom Airtime</option>
+      </select>
+
+      <label for="airtimeVoucher">Airtime Voucher / Reference / PIN</label>
+      <input type="text" id="airtimeVoucher" placeholder="Enter airtime voucher or payment reference" />
+
+      <button class="main-btn" onclick="submitAirtimePayment()">Submit Payment</button>
+
+      <div id="loadingBox" class="loading">
+        <span class="spinner"></span>
+        Verifying airtime payment... this might take some time.
+      </div>
+
+      <div id="paymentMsg" class="success hidden"></div>
+
+      <div class="vault">
+        <strong>Airtime Vault</strong>
+        Airtime received through this platform is collected by the owner and allocated toward signal services and related digital services.
+      </div>
+
+      <p class="footer-note">This page records airtime payments for services, not airtime delivery to clients.</p>
     </div>
+  </div>
 
-    <section class="card" style="margin-top:24px;">
-      <h2 class="section-title">Online Trading Services</h2>
-      <div class="grid">
-        <div class="deal-btn" style="cursor:default;">
-          <span class="deal-amount">Forex Signal Service</span>
-          <span class="deal-price">From R65 per signal</span>
-          <span class="deal-note">Includes entry idea, stop loss, take profit, and PDF guide.</span>
+  <!-- AFFILIATE PAGE -->
+  <div id="affiliatePage" class="page">
+    <div class="card">
+      <h1>Affiliate Page</h1>
+      <p class="subtitle">Choose an affiliate and register under their referral link for access to services.</p>
+
+      <label for="affiliateSelect">Choose Affiliate</label>
+      <select id="affiliateSelect">
+        <option value="">Select affiliate</option>
+        <option value="thabiso001">Thabiso Deals</option>
+        <option value="airhub002">AirHub Connect</option>
+        <option value="signal003">Signal Pro Team</option>
+        <option value="bundle004">Bundle Boss</option>
+      </select>
+
+      <button class="main-btn" onclick="generateAffiliateLink()">Generate Referral Link</button>
+
+      <div id="linkBox" class="info-box hidden">
+        <label for="referralLink">Referral Link</label>
+        <input type="text" id="referralLink" readonly />
+        <button class="main-btn secondary-btn" onclick="copyReferralLink()">Copy Link</button>
+      </div>
+
+      <h3 class="section-title">Register Under Affiliate</h3>
+
+      <label for="affiliateName">Full Name</label>
+      <input type="text" id="affiliateName" placeholder="Enter full name" />
+
+      <label for="affiliatePhone">Phone Number</label>
+      <input type="text" id="affiliatePhone" placeholder="Enter phone number" />
+
+      <label for="affiliateEmail">Email Address</label>
+      <input type="email" id="affiliateEmail" placeholder="Enter email address" />
+
+      <label for="affiliateService">Service Needed</label>
+      <select id="affiliateService">
+        <option value="">Select service</option>
+        <option value="Forex Signals Access">Forex Signals Access</option>
+        <option value="Single Signal">Single Signal</option>
+        <option value="Online Trading Support">Online Trading Support</option>
+        <option value="Artwork Catalog Access">Artwork Catalog Access</option>
+        <option value="VIP Access">VIP Access</option>
+        <option value="Seminar Access">Seminar Access</option>
+        <option value="Study Room with WiFi">Study Room with WiFi</option>
+        <option value="One-on-One Learning">One-on-One Learning</option>
+      </select>
+
+      <label for="affiliateCode">Affiliate Code</label>
+      <input type="text" id="affiliateCode" readonly placeholder="Affiliate code will appear here" />
+
+      <button class="main-btn" onclick="registerAffiliateUser()">Register</button>
+
+      <div id="affiliateMsg" class="success hidden"></div>
+    </div>
+  </div>
+
+  <!-- NEW VIP & LEARNING PAGE -->
+  <div id="learningPage" class="page">
+    <div class="card">
+      <h1>VIP & Learning Access</h1>
+      <p class="subtitle">Premium student support services for learners who want extra access, a study space, WiFi, seminars, and one-on-one help.</p>
+
+      <div class="info-box">
+        This page is for students who want to pay for premium learning support. It includes VIP access, seminar access, study room access with WiFi, and private one-on-one sessions.
+      </div>
+
+      <h3 class="section-title">Available Learning Services</h3>
+
+      <div class="product">
+        <strong>VIP Access</strong><br>
+        Payment: <strong>R500 Airtime</strong><br>
+        Premium access for students who want priority support and extra benefits.
+      </div>
+
+      <div class="product">
+        <strong>Seminar Access</strong><br>
+        Payment: <strong>R300 Airtime</strong><br>
+        Entry to training sessions, seminars, and learning events.
+      </div>
+
+      <div class="product">
+        <strong>Study Room with WiFi</strong><br>
+        Payment: <strong>R200 Airtime</strong><br>
+        Access to a study space with WiFi for students who want a quiet place to learn.
+      </div>
+
+      <div class="product">
+        <strong>One-on-One Learning</strong><br>
+        Payment: <strong>R500 Airtime</strong><br>
+        Private support for students who want personal teaching and direct assistance.
+      </div>
+
+      <div class="product highlight">
+        <strong>Premium Learning Offer</strong><br>
+        Students can pay for VIP access, seminars, study room WiFi, and one-on-one learning through this page.
+      </div>
+
+      <h3 class="section-title">Book Learning Access</h3>
+
+      <label for="studentName">Student Name</label>
+      <input type="text" id="studentName" placeholder="Enter student name" />
+
+      <label for="studentPhone">Phone Number</label>
+      <input type="text" id="studentPhone" placeholder="Enter phone number" />
+
+      <label for="studentEmail">Email Address</label>
+      <input type="email" id="studentEmail" placeholder="Enter email address" />
+
+      <label for="learningPackage">Choose Access Type</label>
+      <select id="learningPackage">
+        <option value="">Choose access type</option>
+        <option value="VIP Access - R500 Airtime">VIP Access - R500 Airtime</option>
+        <option value="Seminar Access - R300 Airtime">Seminar Access - R300 Airtime</option>
+        <option value="Study Room with WiFi - R200 Airtime">Study Room with WiFi - R200 Airtime</option>
+        <option value="One-on-One Learning - R500 Airtime">One-on-One Learning - R500 Airtime</option>
+      </select>
+
+      <label for="learningVoucher">Airtime Voucher / Reference / PIN</label>
+      <input type="text" id="learningVoucher" placeholder="Enter airtime voucher or reference" />
+
+      <button class="main-btn" onclick="submitLearningBooking()">Submit Booking</button>
+
+      <div id="learningLoadingBox" class="loading">
+        <span class="spinner"></span>
+        Processing learning access request... this might take some time.
+      </div>
+
+      <div id="learningMsg" class="success hidden"></div>
+
+      <div class="vault">
+        <strong>Learning Access Hub</strong>
+        This section allows other students to pay for educational support, a study room with WiFi, seminar sessions, and personal one-on-one learning access.
+      </div>
+
+      <p class="footer-note">This page is for student learning support access and premium educational services.</p>
+    </div>
+  </div>
+
+  <!-- SERVICES PAGE -->
+  <div id="servicesPage" class="page">
+    <div class="card">
+      <h1>Services</h1>
+      <p class="subtitle">Service access is activated through airtime payment.</p>
+
+      <div class="services-list">
+        <div>
+          <strong>Forex Signals Access</strong><br>
+          Payment required: <strong>R500 Airtime</strong><br>
+          The R500 airtime paid is used for signals.
         </div>
-        <div class="deal-btn" style="cursor:default;">
-          <span class="deal-amount">Signal Bundle</span>
-          <span class="deal-price">Weekly access</span>
-          <span class="deal-note">For clients who want multiple setups and more coverage.</span>
+
+        <div>
+          <strong>Single Signal</strong><br>
+          Payment required: <strong>R65 Airtime</strong><br>
+          One paid signal request.
         </div>
-        <div class="deal-btn" style="cursor:default;">
-          <span class="deal-amount">Trading Education</span>
-          <span class="deal-price">Beginner friendly</span>
-          <span class="deal-note">Learn chart basics, risk control, and trade planning.</span>
+
+        <div>
+          <strong>Online Trading Support</strong><br>
+          Airtime-based support service.
+        </div>
+
+        <div>
+          <strong>Artwork Catalog Access</strong><br>
+          Access to digital content and artwork listings.
+        </div>
+
+        <div>
+          <strong>VIP Access</strong><br>
+          Premium access for students who want priority support and exclusive service benefits.
+        </div>
+
+        <div>
+          <strong>Seminar Access</strong><br>
+          Paid access to seminars, training sessions, and educational events.
+        </div>
+
+        <div>
+          <strong>Study Room with WiFi</strong><br>
+          A paid learning space for students who need a quiet place with WiFi to study.
+        </div>
+
+        <div>
+          <strong>One-on-One Learning</strong><br>
+          Personal sessions for students who want direct teaching, guidance, and private support.
         </div>
       </div>
-    </section>
 
-    <section class="card" style="margin-top:24px;">
-      <h2 class="section-title">Artwork Catalog</h2>
-      <div class="grid">
-        <div class="deal-btn" style="cursor:default;">
-          <span class="deal-amount">Urban Gold</span>
-          <span class="deal-price">Original canvas</span>
-          <span class="deal-note">Modern abstract piece for office or home display.</span>
-        </div>
-        <div class="deal-btn" style="cursor:default;">
-          <span class="deal-amount">Midnight Bulls</span>
-          <span class="deal-price">Framed print</span>
-          <span class="deal-note">Finance-inspired wall art with bold motion.</span>
-        </div>
-        <div class="deal-btn" style="cursor:default;">
-          <span class="deal-amount">Signal Lines</span>
-          <span class="deal-price">Limited edition</span>
-          <span class="deal-note">Chart-inspired digital artwork for collectors.</span>
-        </div>
+      <div class="info-box">
+        The website is for your business model. Clients and students pay using airtime for services, learning access, seminar entry, study room WiFi, one-on-one help, and premium support.
       </div>
-      <div class="note">Tip: add real images later by replacing these cards with product photos and prices.</div>
-    </section>
-      </section>
     </div>
   </div>
 
   <script>
-    const mainDeals = [
-      { amount: 500, price: 499 },
-      { amount: 600, price: 599 },
-      { amount: 700, price: 699 },
-      { amount: 800, price: 799 },
-      { amount: 900, price: 899 },
-      { amount: 1000, price: 999 }
-    ];
+    const affiliates = {
+      thabiso001: "Thabiso Deals",
+      airhub002: "AirHub Connect",
+      signal003: "Signal Pro Team",
+      bundle004: "Bundle Boss"
+    };
 
-    const smallDeals = [5, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100].map(v => ({ amount: v, price: v - 1 }));
-
-    const mainDealsEl = document.getElementById('mainDeals');
-    const smallDealsEl = document.getElementById('smallDeals');
-    const summaryBox = document.getElementById('summaryBox');
-    const form = document.getElementById('purchaseForm');
-    const purchaseBtn = document.getElementById('purchaseBtn');
-    const statusBox = document.getElementById('statusBox');
-    const refBox = document.getElementById('refBox');
-
-    let selectedDeal = null;
-
-    function renderDeals() {
-      mainDeals.forEach((deal) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'deal-btn';
-        btn.innerHTML = `
-          <span class="deal-amount">R${deal.amount} Airtime</span>
-          <span class="deal-price">Pay R${deal.price}</span>
-          <span class="deal-note">Save R1 instantly</span>
-        `;
-        btn.addEventListener('click', () => selectDeal(deal, btn, 'main'));
-        mainDealsEl.appendChild(btn);
-      });
-
-      smallDeals.forEach((deal) => {
-        const tile = document.createElement('button');
-        tile.type = 'button';
-        tile.className = 'small-tile';
-        tile.textContent = `R${deal.amount} / R${deal.price}`;
-        tile.addEventListener('click', () => selectDeal(deal, tile, 'small'));
-        smallDealsEl.appendChild(tile);
-      });
+    function showPage(pageId) {
+      const pages = document.querySelectorAll(".page");
+      pages.forEach(page => page.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
     }
 
-    function clearSelections() {
-      document.querySelectorAll('.deal-btn, .small-tile').forEach(el => el.classList.remove('active'));
-    }
+    function submitAirtimePayment() {
+      const name = document.getElementById("clientName").value.trim();
+      const phone = document.getElementById("clientPhone").value.trim();
+      const network = document.getElementById("network").value;
+      const service = document.getElementById("servicePackage").value;
+      const voucher = document.getElementById("airtimeVoucher").value.trim();
+      const loadingBox = document.getElementById("loadingBox");
+      const paymentMsg = document.getElementById("paymentMsg");
 
-    function selectDeal(deal, element) {
-      clearSelections();
-      element.classList.add('active');
-      selectedDeal = deal;
-      summaryBox.innerHTML = `Selected deal: <strong>R${deal.amount} Airtime</strong><br>Price to pay: <strong>R${deal.price}</strong>`;
-      statusBox.className = 'status';
-      statusBox.style.display = 'none';
-      refBox.style.display = 'none';
-    }
-
-    function makeReference() {
-      const random = Math.floor(100000 + Math.random() * 900000);
-      return `AIR-${random}`;
-    }
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const network = document.getElementById('network').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      const cashsend = document.getElementById('cashsend').value.trim();
-      const pin = document.getElementById('pin').value.trim();
-
-      statusBox.style.display = 'none';
-      refBox.style.display = 'none';
-
-      if (!selectedDeal) {
-        statusBox.className = 'status error';
-        statusBox.textContent = 'Please select an airtime deal first.';
+      if (!name || !phone || !network || !service || !voucher) {
+        alert("Please complete all fields.");
         return;
       }
 
-      if (!network || !phone || !cashsend || !pin) {
-        statusBox.className = 'status error';
-        statusBox.textContent = 'Please complete all fields before purchasing.';
-        return;
-      }
-
-      purchaseBtn.disabled = true;
-      purchaseBtn.innerHTML = '<span class="loader"></span>This might take some time...';
+      paymentMsg.classList.add("hidden");
+      loadingBox.style.display = "block";
 
       setTimeout(() => {
-        const ref = makeReference();
+        loadingBox.style.display = "none";
 
-        statusBox.className = 'status success';
-        statusBox.textContent = `Purchase request submitted.`;
+        const reference = "PAY" + Math.floor(100000 + Math.random() * 900000);
 
-        refBox.style.display = 'block';
-        refBox.innerHTML = `Reference Number: <strong>${ref}</strong>`;
+        paymentMsg.innerHTML = `
+          Payment recorded successfully.<br>
+          Client: <strong>${name}</strong><br>
+          Service: <strong>${service}</strong><br>
+          Reference: <strong>${reference}</strong><br>
+          Status: <strong>Airtime received for your service</strong>
+        `;
+        paymentMsg.classList.remove("hidden");
 
-        // 🔥 Generate PDF automatically
-        const pdfContent = `
-FOREX SIGNAL RECEIPT
-
-Reference: ${ref}
-Network: ${network}
-Phone: ${phone}
-Deal: R${selectedDeal.amount}
-Price Paid: R${selectedDeal.price}
-
---- SIGNAL DETAILS ---
-Pair: XAU/USD
-Direction: BUY
-Entry: 2325 - 2327
-Stop Loss: 2318
-Take Profit: 2334 / 2340
-
-This is a sample signal. Trade responsibly.
-`;
-
-        const blob = new Blob([pdfContent], { type: 'application/pdf' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `signal-${ref}.pdf`;
-        link.click();
-
-        purchaseBtn.disabled = false;
-        purchaseBtn.textContent = 'Purchase Airtime';
-
-        form.reset();
-        selectedDeal = null;
-        clearSelections();
-        summaryBox.innerHTML = 'Selected deal: <strong>None</strong><br>Price to pay: <strong>R0</strong>';
-      }, 3000);
-    });
-
-    function startCountdown(durationSeconds) {
-      const countdownEl = document.getElementById('countdown');
-      let timer = durationSeconds;
-
-      setInterval(() => {
-        const hours = String(Math.floor(timer / 3600)).padStart(2, '0');
-        const minutes = String(Math.floor((timer % 3600) / 60)).padStart(2, '0');
-        const seconds = String(timer % 60).padStart(2, '0');
-        if (countdownEl) countdownEl.textContent = `${hours}:${minutes}:${seconds}`;
-        timer = timer > 0 ? timer - 1 : durationSeconds;
-      }, 1000);
+        const payments = JSON.parse(localStorage.getItem("serviceAirtimePayments")) || [];
+        payments.push({
+          name,
+          phone,
+          network,
+          service,
+          voucher,
+          reference,
+          date: new Date().toLocaleString()
+        });
+        localStorage.setItem("serviceAirtimePayments", JSON.stringify(payments));
+      }, 2500);
     }
 
-    renderDeals();
-    startCountdown(7200);
+    function generateAffiliateLink() {
+      const selected = document.getElementById("affiliateSelect").value;
+      const linkBox = document.getElementById("linkBox");
+
+      if (!selected) {
+        alert("Please choose an affiliate first.");
+        return;
+      }
+
+      const baseUrl = window.location.href.split("?")[0];
+      const fullLink = baseUrl + "?ref=" + encodeURIComponent(selected);
+
+      document.getElementById("referralLink").value = fullLink;
+      document.getElementById("affiliateCode").value = selected;
+      linkBox.classList.remove("hidden");
+    }
+
+    function copyReferralLink() {
+      const referralInput = document.getElementById("referralLink");
+      referralInput.select();
+      referralInput.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Referral link copied.");
+    }
+
+    function registerAffiliateUser() {
+      const name = document.getElementById("affiliateName").value.trim();
+      const phone = document.getElementById("affiliatePhone").value.trim();
+      const email = document.getElementById("affiliateEmail").value.trim();
+      const service = document.getElementById("affiliateService").value;
+      const affiliateCode = document.getElementById("affiliateCode").value.trim();
+      const affiliateMsg = document.getElementById("affiliateMsg");
+
+      if (!name || !phone || !email || !service || !affiliateCode) {
+        alert("Please complete all fields and choose an affiliate.");
+        return;
+      }
+
+      const entry = {
+        name,
+        phone,
+        email,
+        service,
+        affiliateCode,
+        affiliateName: affiliates[affiliateCode] || affiliateCode,
+        date: new Date().toLocaleString()
+      };
+
+      const users = JSON.parse(localStorage.getItem("affiliateRegistrations")) || [];
+      users.push(entry);
+      localStorage.setItem("affiliateRegistrations", JSON.stringify(users));
+
+      affiliateMsg.innerHTML = `
+        Registration successful.<br>
+        Registered under <strong>${entry.affiliateName}</strong><br>
+        Service selected: <strong>${entry.service}</strong>
+      `;
+      affiliateMsg.classList.remove("hidden");
+
+      document.getElementById("affiliateName").value = "";
+      document.getElementById("affiliatePhone").value = "";
+      document.getElementById("affiliateEmail").value = "";
+      document.getElementById("affiliateService").value = "";
+    }
+
+    function submitLearningBooking() {
+      const name = document.getElementById("studentName").value.trim();
+      const phone = document.getElementById("studentPhone").value.trim();
+      const email = document.getElementById("studentEmail").value.trim();
+      const learningPackage = document.getElementById("learningPackage").value;
+      const voucher = document.getElementById("learningVoucher").value.trim();
+      const loadingBox = document.getElementById("learningLoadingBox");
+      const learningMsg = document.getElementById("learningMsg");
+
+      if (!name || !phone || !email || !learningPackage || !voucher) {
+        alert("Please complete all fields.");
+        return;
+      }
+
+      learningMsg.classList.add("hidden");
+      loadingBox.style.display = "block";
+
+      setTimeout(() => {
+        loadingBox.style.display = "none";
+
+        const reference = "LRN" + Math.floor(100000 + Math.random() * 900000);
+
+        learningMsg.innerHTML = `
+          Booking recorded successfully.<br>
+          Student: <strong>${name}</strong><br>
+          Access Type: <strong>${learningPackage}</strong><br>
+          Reference: <strong>${reference}</strong><br>
+          Status: <strong>Learning access request received</strong>
+        `;
+        learningMsg.classList.remove("hidden");
+
+        const bookings = JSON.parse(localStorage.getItem("learningBookings")) || [];
+        bookings.push({
+          name,
+          phone,
+          email,
+          learningPackage,
+          voucher,
+          reference,
+          date: new Date().toLocaleString()
+        });
+        localStorage.setItem("learningBookings", JSON.stringify(bookings));
+      }, 2500);
+    }
+
+    (function autoFillAffiliateFromLink() {
+      const params = new URLSearchParams(window.location.search);
+      const ref = params.get("ref");
+
+      if (ref && affiliates[ref]) {
+        document.getElementById("affiliateSelect").value = ref;
+        document.getElementById("affiliateCode").value = ref;
+        document.getElementById("linkBox").classList.remove("hidden");
+        document.getElementById("referralLink").value = window.location.href.split("?")[0] + "?ref=" + encodeURIComponent(ref);
+      }
+    })();
   </script>
 </body>
 </html>
