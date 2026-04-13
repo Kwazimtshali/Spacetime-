@@ -458,6 +458,192 @@
     .icon.orange svg { stroke: var(--orange); }
     .icon.teal svg { stroke: var(--teal); }
 
+    .hidden {
+      display: none !important;
+    }
+
+    .login-screen {
+      min-height: calc(100vh - 82px);
+      background: #f5f5f5;
+      padding: 10px 8px 110px;
+    }
+
+    .login-topline {
+      height: 18px;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      margin-bottom: 12px;
+    }
+
+    .mini-brand {
+      font-size: 13px;
+      color: #222;
+      letter-spacing: .1px;
+    }
+
+    .login-search-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 4px;
+      margin-bottom: 10px;
+    }
+
+    .login-search-label {
+      color: var(--teal);
+      font-size: 10px;
+      line-height: 1.3;
+      padding-top: 4px;
+    }
+
+    .login-logo-wrap {
+      flex: 0 0 auto;
+    }
+
+    .login-logo-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #efb030;
+      border: 2px solid #111;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0,0,0,.12);
+    }
+
+    .login-logo-circle::before,
+    .login-logo-circle::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      border: 2px solid #111;
+      border-left-color: transparent;
+      border-right-color: transparent;
+    }
+
+    .login-logo-circle::before {
+      width: 24px;
+      height: 24px;
+      top: 7px;
+    }
+
+    .login-logo-circle::after {
+      width: 16px;
+      height: 16px;
+      top: 13px;
+    }
+
+    .login-card {
+      padding: 0 4px;
+    }
+
+    .login-greeting {
+      color: #4e8d94;
+      font-size: 10px;
+      line-height: 1.4;
+      margin: 0 0 16px;
+      max-width: 270px;
+    }
+
+    .field-label {
+      display: block;
+      color: #5e5e5e;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    .password-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .password-input {
+      width: 100%;
+      height: 40px;
+      border: 0;
+      border-bottom: 1px solid #d6d6d6;
+      background: transparent;
+      padding: 0 58px 0 0;
+      font-size: 13px;
+      color: #222;
+      outline: none;
+    }
+
+    .password-input::placeholder {
+      color: #b0b0b0;
+    }
+
+    .show-btn {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: 0;
+      color: #c2c2c2;
+      font-size: 10px;
+      padding: 4px 0;
+      cursor: pointer;
+    }
+
+    .login-primary,
+    .login-secondary,
+    .cancel-btn {
+      width: 100%;
+      height: 34px;
+      border-radius: 7px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: filter .15s ease, transform .15s ease;
+    }
+
+    .login-primary:active,
+    .login-secondary:active,
+    .cancel-btn:active {
+      transform: scale(.99);
+    }
+
+    .login-primary {
+      border: 0;
+      background: #e99a2d;
+      color: #fff;
+      margin-bottom: 10px;
+      box-shadow: inset 0 -1px 0 rgba(0,0,0,.08);
+    }
+
+    .login-secondary {
+      border: 1px solid #d7d7d7;
+      background: #fafafa;
+      color: #444;
+      margin-bottom: 12px;
+    }
+
+    .login-code {
+      font-size: 8px;
+      color: #9b9b9b;
+      letter-spacing: .2px;
+    }
+
+    .cancel-btn {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      width: calc(100% - 16px);
+      max-width: 414px;
+      background: #f8f8f8;
+      border: 1px solid #dddddd;
+      color: #333;
+      text-align: left;
+      padding: 0 14px;
+      z-index: 31;
+    }
+
     .panel {
       margin-top: 18px;
       background: var(--surface);
@@ -552,7 +738,7 @@
 <body>
   <div class="app">
     <div class="topbar">
-      <div class="brand">#</div>
+      <div class="brand">FNB</div>
       <div class="qr" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
     </div>
 
@@ -578,7 +764,7 @@
       </div>
     </section>
 
-    <main class="content">
+    <main class="content" id="home-screen">
       <div class="search" role="button" tabindex="0" aria-label="Search help options">
         <div class="search-left">
           <div class="glass"></div>
@@ -588,7 +774,7 @@
 
       <section class="grid" aria-label="Quick actions">
         <div class="tile">
-          <button class="tile-btn" data-panel="login">
+          <button class="tile-btn" data-panel="login" data-screen="login-screen">
             <div class="tile-box"><div class="icon orange">
               <svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="5" y="11" width="14" height="10" rx="2"/></svg>
             </div></div>
@@ -662,8 +848,38 @@
 
       <section class="panel" id="info-panel" aria-live="polite">
         <div class="panel-title">Welcome</div>
-        <div class="panel-text">Tap any tile to preview that section. The layout is tuned for mobile screens so all quick actions sit neatly on one screen without spilling over like dropped groceries.</div>
+        <div class="panel-text">Tap any tile to preview that section. The layout is tuned for mobile screens so all quick actions sit neatly on one screen without spilling over.</div>
       </section>
+    </main>
+
+    <main class="login-screen hidden" id="login-screen">
+      <div class="login-topline">
+        <div class="mini-brand">#</div>
+      </div>
+
+      <div class="login-search-row">
+        <div class="login-search-label">How can we help you?</div>
+        <div class="login-logo-wrap">
+          <div class="login-logo-circle"></div>
+        </div>
+      </div>
+
+      <section class="login-card">
+        <p class="login-greeting">Hi Jennifer Ferreira, please enter your PIN Online Banking password to login</p>
+
+        <label class="field-label" for="password">Password:</label>
+        <div class="password-wrap">
+          <input id="password" class="password-input" type="password" placeholder="Enter Password" />
+          <button class="show-btn" type="button" id="toggle-password">SHOW</button>
+        </div>
+
+        <button class="login-primary" type="button">Login</button>
+        <button class="login-secondary" type="button">Forgot Password</button>
+
+        <div class="login-code">532-412-525</div>
+      </section>
+
+      <button class="cancel-btn" type="button" id="back-home">Cancel</button>
     </main>
 
     <nav class="bottom">
@@ -695,6 +911,13 @@
 
   <script>
     const panel = document.getElementById('info-panel');
+    const homeScreen = document.getElementById('home-screen');
+    const loginScreen = document.getElementById('login-screen');
+    const backHome = document.getElementById('back-home');
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
+    const bottomNav = document.querySelector('.bottom');
+
     const content = {
       login: {
         title: 'Login',
@@ -730,6 +953,21 @@
       }
     };
 
+    function showScreen(screenId) {
+      if (screenId === 'login-screen') {
+        homeScreen.classList.add('hidden');
+        loginScreen.classList.remove('hidden');
+        bottomNav.classList.add('hidden');
+        document.querySelector('.hero').classList.add('hidden');
+        setTimeout(() => passwordInput.focus(), 60);
+      } else {
+        homeScreen.classList.remove('hidden');
+        loginScreen.classList.add('hidden');
+        bottomNav.classList.remove('hidden');
+        document.querySelector('.hero').classList.remove('hidden');
+      }
+    }
+
     const buttons = document.querySelectorAll('.tile-btn');
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -737,8 +975,24 @@
         btn.classList.add('is-active');
         const key = btn.dataset.panel;
         const item = content[key];
-        panel.innerHTML = `\n          <div class="panel-title">${item.title}</div>\n          <div class="panel-text">${item.text}</div>\n        `;
+        if (item && panel) {
+          panel.innerHTML = `
+            <div class="panel-title">${item.title}</div>
+            <div class="panel-text">${item.text}</div>
+          `;
+        }
+        if (btn.dataset.screen) {
+          showScreen(btn.dataset.screen);
+        }
       });
+    });
+
+    backHome.addEventListener('click', () => showScreen('home'));
+
+    togglePassword.addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      togglePassword.textContent = isPassword ? 'HIDE' : 'SHOW';
     });
   </script>
 </body>
