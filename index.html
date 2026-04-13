@@ -2,513 +2,497 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bank App Mockup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Bank App UI</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
-    body {
-      background: #efefef;
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-    }
-    .phone {
-      width: 390px;
-      min-height: 844px;
-      background: #f3f3f3;
-      position: relative;
-      overflow: hidden;
+    :root {
+      --bg: #f2f2f2;
+      --surface: #ffffff;
+      --text: #111111;
+      --muted: #6f6f6f;
+      --line: #d7d7d7;
+      --teal: #0aa8ad;
+      --teal-2: #8dd3d6;
+      --orange: #ef9627;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --radius: 22px;
     }
 
-    .status-bar {
-      height: 42px;
-      padding: 12px 18px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #5f5f5f;
-      font-size: 13px;
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
     }
-    .status-left, .status-right {
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #e8e8e8;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      min-height: 100%;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: var(--bg);
+      position: relative;
+      overflow-x: hidden;
+      padding-bottom: calc(92px + env(safe-area-inset-bottom));
+    }
+
+    .topbar {
+      height: 82px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 22px 18px;
+      background: #fff;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+
+    .qr {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+      flex: 0 0 auto;
+    }
+
+    .qr span {
+      border: 2.5px solid #111;
+      border-radius: 1px;
+      background: #fff;
+    }
+
+    .hero {
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 55%, rgba(255,255,255,.34), transparent 28%),
+        radial-gradient(circle at 82% 24%, rgba(255,255,255,.18), transparent 18%),
+        linear-gradient(135deg, #8bd0d4 0%, #9cdbde 42%, #63bec6 100%);
+      border-top: 1px solid rgba(0,0,0,.04);
+    }
+
+    .hero-header {
+      position: absolute;
+      top: 16px;
+      left: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 2;
+    }
+
+    .circle-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 4px solid var(--teal);
+      background: #efb030;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .circle-logo::before {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border: 3.5px solid #111;
+      border-left-color: transparent;
+      border-top-color: transparent;
+      border-radius: 50%;
+      transform: rotate(45deg);
+      position: absolute;
+    }
+
+    .divider {
+      width: 2px;
+      height: 30px;
+      background: rgba(0,0,0,.3);
+    }
+
+    .speed-stripe {
+      width: 32px;
+      height: 16px;
+      transform: skewX(-28deg);
+      background: linear-gradient(135deg, #0f95a7 0 50%, #f0aa33 50% 100%);
+      border-radius: 2px;
+      margin-right: -2px;
+    }
+
+    .hero-title {
+      font-size: 18px;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .dot-bar {
-      display: flex;
-      gap: 2px;
-      align-items: end;
-    }
-    .dot-bar span {
-      display: block;
-      width: 3px;
-      background: #5e5e5e;
-      border-radius: 2px;
-    }
-    .dot-bar span:nth-child(1){height:8px}
-    .dot-bar span:nth-child(2){height:11px}
-    .dot-bar span:nth-child(3){height:15px}
-    .dot-bar span:nth-child(4){height:18px}
 
-    .header {
-      padding: 30px 28px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #111;
-    }
-    .header .brand {
-      font-size: 25px;
-      font-weight: 500;
-      letter-spacing: 0.4px;
-    }
-    .qr {
-      width: 34px;
-      height: 34px;
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 4px;
-    }
-    .qr span {
-      border: 3px solid #111;
-      border-radius: 2px;
+    .hero-title small {
+      font-size: 11px;
     }
 
-    .hero {
-      height: 218px;
-      background: linear-gradient(135deg, #8acfd2 0%, #a4dde0 45%, #57b9c2 100%);
-      position: relative;
-      overflow: hidden;
-      border-top: 1px solid rgba(0,0,0,0.05);
-    }
-    .hero-inner {
+    .intro-card {
       position: absolute;
-      inset: 0;
-      padding: 18px 16px;
-    }
-    .speedpoint-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-left: 8px;
-      color: #111;
-      font-weight: 700;
-      font-size: 20px;
-    }
-    .speed-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: #f0b12f;
-      border: 4px solid #0da6b2;
-      position: relative;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-    }
-    .speed-icon::before {
-      content: "";
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 4px solid #111;
-      border-top-color: transparent;
-      border-left-color: transparent;
-      transform: rotate(45deg);
-      position: absolute;
-    }
-    .speed-stripe {
-      width: 28px;
-      height: 18px;
-      background: linear-gradient(135deg, #0c95a5 0%, #0c95a5 50%, #f4a732 50%, #f4a732 100%);
-      transform: skewX(-28deg);
-      border-radius: 3px;
-      margin-left: 2px;
-    }
-    .ad-card {
-      position: absolute;
-      left: 14px;
-      top: 92px;
-      width: 255px;
-      height: 140px;
+      left: 16px;
+      top: 94px;
+      width: min(60vw, 250px);
+      max-width: 250px;
+      height: 138px;
       border-radius: 22px;
-      border: 3px solid #269fb0;
-      background: linear-gradient(90deg, rgba(6,167,192,0.9) 0%, rgba(168,234,238,0.85) 100%);
-      padding: 18px 20px;
-      box-shadow: inset 0 0 28px rgba(255,255,255,0.2);
+      border: 3px solid #259fb2;
+      background: linear-gradient(90deg, rgba(8,171,191,.92), rgba(189,240,242,.82));
+      box-shadow: inset 0 0 34px rgba(255,255,255,.18);
+      padding: 17px 18px;
+      z-index: 1;
     }
-    .ad-card h2 {
-      font-size: 28px;
-      line-height: 1.08;
+
+    .intro-card .big {
+      font-size: clamp(23px, 4.3vw, 28px);
+      line-height: 1.03;
       font-weight: 400;
-      color: #050505;
+      letter-spacing: -.3px;
     }
-    .ad-card h2 strong {
-      font-size: 33px;
+
+    .intro-card .big strong {
       font-weight: 800;
+      font-size: clamp(25px, 4.8vw, 31px);
     }
-    .device-stack {
+
+    .devices {
       position: absolute;
-      right: -6px;
+      right: -8px;
       top: 18px;
-      width: 215px;
-      height: 190px;
+      width: min(54vw, 220px);
+      height: 188px;
+      z-index: 2;
     }
-    .tablet, .terminal, .phone-card, .dashboard {
+
+    .screen, .device, .monitor, .mini-device {
       position: absolute;
-      border-radius: 12px;
-      background: #f5f7f8;
-      border: 2px solid #1d2f35;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      background: #f8fbfc;
+      border: 2px solid #212a2d;
+      box-shadow: 0 10px 22px rgba(0,0,0,.16);
+      overflow: hidden;
     }
-    .tablet {
-      width: 150px;
-      height: 92px;
-      right: 25px;
-      top: 8px;
-      transform: rotate(-9deg);
-    }
-    .tablet::before, .tablet::after, .dashboard::before, .terminal::before, .phone-card::before {
+
+    .screen::before, .device::before, .monitor::before, .mini-device::before {
       content: "";
       position: absolute;
-      inset: 9px;
+      inset: 6px;
       border-radius: 8px;
-      background: linear-gradient(180deg, #ffffff, #edf2f4);
+      background: linear-gradient(180deg, #fdfefe 0%, #eef5f6 100%);
     }
-    .dashboard {
-      width: 125px;
-      height: 90px;
-      right: 4px;
-      bottom: 0;
-      transform: rotate(3deg);
+
+    .screen {
+      width: 156px;
+      height: 96px;
+      right: 22px;
+      top: 5px;
+      border-radius: 10px;
+      transform: rotate(-9deg) scale(.94);
+      transform-origin: center;
     }
-    .terminal {
-      width: 54px;
-      height: 100px;
-      right: 107px;
-      bottom: 4px;
-      transform: rotate(-7deg);
-    }
-    .phone-card {
-      width: 45px;
-      height: 86px;
-      right: 148px;
-      bottom: 2px;
-      transform: rotate(12deg);
-    }
-    .mini-printer {
+
+    .screen::after {
+      content: "";
       position: absolute;
-      width: 46px;
-      height: 22px;
+      inset: 14px;
+      background:
+        linear-gradient(#d8ecef 0 0) 0 0/100% 12px no-repeat,
+        linear-gradient(#c7dfe2 0 0) 10px 24px/22px 8px no-repeat,
+        linear-gradient(#c7dfe2 0 0) 46px 24px/22px 8px no-repeat,
+        linear-gradient(#c7dfe2 0 0) 82px 24px/22px 8px no-repeat,
+        linear-gradient(#a2d5d8 0 0) 10px 44px/48px 26px no-repeat,
+        linear-gradient(#e6efef 0 0) 64px 44px/56px 26px no-repeat;
+      border-radius: 6px;
+    }
+
+    .device {
+      width: 55px;
+      height: 103px;
+      right: 109px;
+      bottom: 2px;
+      border-radius: 10px;
+      transform: rotate(-7deg) scale(.94);
+      transform-origin: center;
+    }
+
+    .device::after {
+      content: "";
+      position: absolute;
+      inset: 12px 10px 14px;
+      background:
+        linear-gradient(#38c36d 0 0) 0 0/100% 16px no-repeat,
+        linear-gradient(#735cff 0 0) 0 22px/18px 16px no-repeat,
+        linear-gradient(#f3a12b 0 0) 23px 22px/18px 16px no-repeat,
+        linear-gradient(#13a8ad 0 0) 0 43px/18px 16px no-repeat,
+        linear-gradient(#f06b6b 0 0) 23px 43px/18px 16px no-repeat;
+      border-radius: 8px;
+    }
+
+    .mini-device {
+      width: 42px;
+      height: 84px;
+      right: 149px;
+      bottom: 6px;
+      border-radius: 10px;
+      transform: rotate(11deg) scale(.94);
+      transform-origin: center;
+    }
+
+    .mini-device::after {
+      content: "";
+      position: absolute;
+      inset: 12px 8px 14px;
+      background:
+        linear-gradient(#ffffff 0 0) 0 0/100% 50px no-repeat,
+        linear-gradient(#efaa2c 0 0) 0 56px/100% 10px no-repeat;
+      border-radius: 6px;
+    }
+
+    .monitor {
+      width: 126px;
+      height: 88px;
+      right: 2px;
+      bottom: 0;
+      border-radius: 8px;
+      transform: rotate(2deg) scale(.94);
+      transform-origin: center;
+    }
+
+    .monitor::after {
+      content: "";
+      position: absolute;
+      inset: 12px 10px;
+      background:
+        linear-gradient(#dcecef 0 0) 0 0/100% 12px no-repeat,
+        linear-gradient(#89c9cf 0 0) 10px 26px/42px 4px no-repeat,
+        linear-gradient(#89c9cf 0 0) 10px 34px/54px 4px no-repeat,
+        linear-gradient(#89c9cf 0 0) 10px 42px/34px 4px no-repeat,
+        linear-gradient(#e6efef 0 0) 72px 24px/30px 24px no-repeat;
+      border-radius: 6px;
+    }
+
+    .printer {
+      position: absolute;
       right: 14px;
       top: 108px;
+      width: 42px;
+      height: 22px;
+      background: linear-gradient(180deg, #1ab2be, #0a9fa7);
+      border: 2px solid #233237;
       border-radius: 8px;
-      background: #0da6b2;
-      border: 2px solid #1d2f35;
       transform: rotate(-14deg);
+      box-shadow: 0 8px 16px rgba(0,0,0,.14);
     }
+
     .checkout {
       position: absolute;
-      right: 16px;
-      top: 120px;
-      background: #ea9a21;
+      right: 20px;
+      top: 118px;
+      background: var(--orange);
       color: #fff;
-      font-size: 12px;
+      font-size: 11px;
+      font-weight: 700;
       padding: 6px 12px;
       border-radius: 4px;
-      font-weight: 700;
-      transform: rotate(-7deg);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transform: rotate(-8deg);
+      box-shadow: 0 4px 10px rgba(0,0,0,.14);
     }
 
     .content {
-      padding: 18px 18px 138px;
+      padding: 18px 16px 0;
     }
-    .search-box {
+
+    .search {
       height: 72px;
       background: #fff;
-      border: 2px solid #d3d3d3;
-      border-radius: 28px;
+      border: 2px solid var(--line);
+      border-radius: 30px;
       display: flex;
       align-items: center;
       overflow: hidden;
-      margin-bottom: 26px;
+      box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
     }
-    .search-icon {
-      width: 94px;
+
+    .search-left {
+      width: 88px;
       height: 100%;
-      background: #0ca7ab;
+      background: var(--teal);
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
       display: grid;
       place-items: center;
-      border-top-right-radius: 18px;
-      border-bottom-right-radius: 18px;
-      border-right: 1px solid rgba(255,255,255,0.4);
+      flex: 0 0 auto;
     }
-    .magnifier {
-      width: 33px;
-      height: 33px;
-      border: 4px solid #ffffff;
+
+    .glass {
+      width: 32px;
+      height: 32px;
+      border: 4px solid #fff;
       border-radius: 50%;
       position: relative;
     }
-    .magnifier::after {
+
+    .glass::after {
       content: "";
       position: absolute;
-      width: 15px;
+      width: 14px;
       height: 4px;
-      background: #fff;
       border-radius: 4px;
-      right: -9px;
-      bottom: -2px;
+      background: #fff;
+      right: -8px;
+      bottom: 1px;
       transform: rotate(45deg);
     }
+
     .search-text {
-      color: #777;
-      font-size: 29px;
-      padding-left: 24px;
-      font-weight: 400;
+      padding-left: 18px;
+      padding-right: 10px;
+      font-size: clamp(19px, 5vw, 27px);
+      color: #787878;
+      letter-spacing: -.3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .grid {
+      margin-top: 24px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 30px 18px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px 12px;
+      align-items: start;
     }
-    .feature {
+
+    .tile {
       text-align: center;
-      color: #111;
     }
-    .feature-box {
-      width: 94px;
-      height: 94px;
-      margin: 0 auto 12px;
+
+    .tile-btn {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+      display: block;
+    }
+
+    .tile-btn:focus-visible {
+      outline: 3px solid rgba(10,168,173,.25);
+      outline-offset: 4px;
+      border-radius: 24px;
+    }
+
+    .tile-box {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      margin: 0 auto 10px;
+      border: 2px solid #d8d8d8;
       background: #fff;
-      border: 2px solid #dadada;
       border-radius: 22px;
       display: grid;
       place-items: center;
+      box-shadow: 0 1px 0 rgba(255,255,255,.9) inset;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+      min-height: 76px;
+      max-width: 94px;
     }
-    .feature-label {
-      font-size: 22px;
+
+    .tile-btn:hover .tile-box {
+      box-shadow: var(--shadow);
+      border-color: #cecece;
+    }
+
+    .tile-btn:active .tile-box,
+    .tile-btn.is-active .tile-box {
+      transform: scale(.97);
+      box-shadow: 0 6px 18px rgba(0,0,0,.10);
+      border-color: #cfcfcf;
+    }
+
+    .tile-label {
+      font-size: clamp(14px, 3.8vw, 19px);
       line-height: 1.1;
-      font-weight: 400;
-    }
-
-    .ico {
-      position: relative;
-      width: 40px;
-      height: 40px;
-    }
-    .orange { color: #ef8f20; border-color: #ef8f20; }
-    .teal { color: #13a6ab; border-color: #13a6ab; }
-
-    .lock::before {
-      content: "";
-      position: absolute;
-      width: 26px;
-      height: 20px;
-      border: 4px solid #ef8f20;
-      border-radius: 4px;
-      left: 7px;
-      bottom: 4px;
-    }
-    .lock::after {
-      content: "";
-      position: absolute;
-      width: 18px;
-      height: 16px;
-      border: 4px solid #ef8f20;
-      border-bottom: none;
-      border-radius: 12px 12px 0 0;
-      left: 11px;
-      top: 1px;
-    }
-
-    .message::before {
-      content: "";
-      position: absolute;
-      inset: 8px 4px 10px 4px;
-      border: 4px solid #13a6ab;
-      border-radius: 12px;
-    }
-    .message::after {
-      content: "";
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-left: 4px solid #13a6ab;
-      border-bottom: 4px solid #13a6ab;
-      bottom: 3px;
-      left: 11px;
-      transform: skewX(-18deg) rotate(-4deg);
-      background: transparent;
-    }
-
-    .cart::before {
-      content: "";
-      position: absolute;
-      left: 6px;
-      top: 12px;
-      width: 24px;
-      height: 14px;
-      border: 4px solid #ef8f20;
-      border-top: none;
-      transform: skewX(-10deg);
-    }
-    .cart::after {
-      content: "";
-      position: absolute;
-      left: 3px;
-      top: 7px;
-      width: 10px;
-      height: 4px;
-      background: #ef8f20;
-      border-radius: 4px;
-      box-shadow: 12px 22px 0 0 #ef8f20, 26px 22px 0 0 #ef8f20;
-    }
-
-    .hand::before {
-      content: "";
-      position: absolute;
-      left: 5px;
-      top: 19px;
-      width: 26px;
-      height: 12px;
-      border: 4px solid #13a6ab;
-      border-top: none;
-      border-right: none;
-      border-radius: 0 0 0 12px;
-      transform: skewX(-18deg);
-    }
-    .hand::after {
-      content: "";
-      position: absolute;
-      right: 2px;
-      top: 8px;
-      width: 11px;
-      height: 18px;
-      border: 4px solid #13a6ab;
-      border-radius: 4px;
-      box-shadow: -16px 6px 0 -2px rgba(0,0,0,0);
-    }
-
-    .transfer::before, .transfer::after {
-      content: "";
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border-top: 4px solid #13a6ab;
-      border-right: 4px solid #13a6ab;
-    }
-    .transfer::before {
-      top: 1px;
-      right: 6px;
-      transform: rotate(45deg);
-    }
-    .transfer::after {
-      bottom: 1px;
-      left: 6px;
-      transform: rotate(-135deg);
-    }
-
-    .gift::before {
-      content: "";
-      position: absolute;
-      inset: 13px 6px 5px;
-      border: 4px solid #ef8f20;
-      border-top: none;
-      border-radius: 2px;
-    }
-    .gift::after {
-      content: "";
-      position: absolute;
-      left: 6px;
-      top: 13px;
-      width: 28px;
-      height: 4px;
-      background: #ef8f20;
-      box-shadow: 12px 0 0 0 #ef8f20;
-    }
-    .gift .bow-left, .gift .bow-right, .gift .ribbon {
-      position: absolute;
-      display: block;
-    }
-    .gift .bow-left {
-      width: 12px;
-      height: 10px;
-      border: 4px solid #ef8f20;
-      border-radius: 12px 12px 0 12px;
-      top: 2px;
-      left: 8px;
-      border-bottom: none;
-      transform: rotate(-16deg);
-    }
-    .gift .bow-right {
-      width: 12px;
-      height: 10px;
-      border: 4px solid #ef8f20;
-      border-radius: 12px 12px 12px 0;
-      top: 2px;
-      right: 8px;
-      border-bottom: none;
-      transform: rotate(16deg);
-    }
-    .gift .ribbon {
-      width: 4px;
-      height: 28px;
-      background: #ef8f20;
-      left: 18px;
-      top: 12px;
-    }
-
-    .voucher::before {
-      content: "%";
-      position: absolute;
-      font-size: 28px;
-      font-weight: 700;
-      color: #13a6ab;
-      inset: 5px 0 0 0;
+      letter-spacing: -.2px;
+      min-height: 2.3em;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
       text-align: center;
-    }
-    .voucher::after {
-      content: "";
-      position: absolute;
-      inset: 7px 3px;
-      border: 4px solid #13a6ab;
-      border-radius: 8px;
-      clip-path: polygon(0 0, 100% 0, 100% 34%, 90% 50%, 100% 66%, 100% 100%, 0 100%, 0 66%, 10% 50%, 0 34%);
+      color: #141414;
     }
 
-    .insure::before {
-      content: "";
-      position: absolute;
-      inset: 5px;
-      border: 4px solid #13a6ab;
-      border-radius: 50%;
-    }
-    .insure::after {
-      content: "";
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      border: 4px solid #13a6ab;
-      left: 9px;
-      top: 9px;
-      box-shadow: 16px 0 0 -4px #fff, 16px 0 0 4px #13a6ab, 8px 16px 0 -4px #fff, 8px 16px 0 4px #13a6ab;
+    .icon svg {
+      width: min(42px, 55%);
+      height: min(42px, 55%);
+      stroke-width: 2.2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
-    .bottom-nav {
-      position: absolute;
-      left: 0;
-      right: 0;
+    .icon.orange svg { stroke: var(--orange); }
+    .icon.teal svg { stroke: var(--teal); }
+
+    .panel {
+      margin-top: 18px;
+      background: var(--surface);
+      border: 1px solid #dfdfdf;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.04);
+    }
+
+    .panel-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .panel-text {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .bottom {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
       bottom: 0;
+      width: 100%;
+      max-width: 430px;
       background: #fff;
-      border-top: 1px solid #d7d7d7;
-      padding: 12px 10px 18px;
+      border-top: 1px solid #d8d8d8;
+      padding: 12px 8px calc(14px + env(safe-area-inset-bottom));
+      z-index: 30;
     }
-    .indicator {
+
+    .active-line {
       position: absolute;
       top: 0;
       left: 0;
@@ -517,242 +501,245 @@
       background: #111;
       border-radius: 0 0 4px 0;
     }
-    .nav-items {
+
+    .nav {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      align-items: end;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       text-align: center;
-      gap: 8px;
-    }
-    .nav-item {
-      color: #111;
-      font-size: 16px;
-    }
-    .nav-icon {
-      width: 34px;
-      height: 34px;
-      margin: 0 auto 8px;
-      position: relative;
-    }
-    .home-icon::before {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 18px;
-      border: 3px solid #111;
-      border-top: none;
-      left: 7px;
-      bottom: 4px;
-    }
-    .home-icon::after {
-      content: "";
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border-left: 3px solid #111;
-      border-top: 3px solid #111;
-      transform: rotate(45deg);
-      left: 8px;
-      top: 4px;
-      background: #fff;
-    }
-    .card-icon::before {
-      content: "";
-      position: absolute;
-      inset: 6px 3px 9px;
-      border: 3px solid #111;
-      border-radius: 5px;
-    }
-    .card-icon::after {
-      content: "";
-      position: absolute;
-      left: 7px;
-      right: 7px;
-      top: 13px;
-      height: 3px;
-      background: #111;
-    }
-    .chat-icon::before {
-      content: "";
-      position: absolute;
-      inset: 7px 4px 10px;
-      border: 3px solid #111;
-      border-radius: 8px;
-    }
-    .chat-icon::after {
-      content: "";
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-left: 3px solid #111;
-      border-bottom: 3px solid #111;
-      bottom: 5px;
-      left: 10px;
-      transform: skewX(-18deg);
-      background: #fff;
-    }
-    .profile-icon::before {
-      content: "";
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      border: 3px solid #111;
-      border-radius: 50%;
-      left: 9px;
-      top: 3px;
-    }
-    .profile-icon::after {
-      content: "";
-      position: absolute;
-      width: 24px;
-      height: 13px;
-      border: 3px solid #111;
-      border-radius: 14px 14px 8px 8px;
-      left: 3px;
-      bottom: 4px;
-    }
-    .menu-icon::before, .menu-icon::after, .menu-icon span {
-      content: "";
-      position: absolute;
-      left: 2px;
-      right: 2px;
-      height: 3px;
-      background: #111;
-      border-radius: 4px;
-    }
-    .menu-icon::before { top: 8px; }
-    .menu-icon span { top: 16px; }
-    .menu-icon::after { top: 24px; }
-    .nav-text {
-      font-size: 18px;
-      white-space: nowrap;
+      align-items: end;
+      gap: 2px;
     }
 
-    @media (max-width: 430px) {
-      .phone {
-        width: 100vw;
-        min-height: 100vh;
-      }
-      .feature-box {
-        width: 88px;
-        height: 88px;
-      }
-      .feature-label { font-size: 20px; }
-      .search-text { font-size: 26px; }
-      .nav-text { font-size: 16px; }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 12px;
+      letter-spacing: -.1px;
+      color: #111;
+      text-decoration: none;
+      padding: 4px 2px 0;
+      cursor: pointer;
+    }
+
+    .nav-item svg {
+      width: 29px;
+      height: 29px;
+      stroke: #111;
+      stroke-width: 2.2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-bottom: 8px;
+    }
+
+    .nav-item:active {
+      opacity: .78;
+    }
+
+    @media (max-width: 380px) {
+      .topbar { padding-left: 18px; padding-right: 18px; }
+      .content { padding-left: 12px; padding-right: 12px; }
+      .grid { gap: 18px 10px; }
+      .hero { height: 208px; }
+      .intro-card { left: 12px; width: min(58vw, 225px); height: 128px; }
+      .devices { transform: scale(.9); transform-origin: top right; right: -18px; }
+      .search-left { width: 78px; }
     }
   </style>
 </head>
 <body>
-      <div class="header">
-      <div class="brand">FNB</div>
-      <div class="qr"><span></span><span></span><span></span><span></span></div>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">#</div>
+      <div class="qr" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
     </div>
 
     <section class="hero">
-      <div class="hero-inner">
-        <div class="speedpoint-logo">
-          <div class="speed-icon"></div>
-          <div style="width:2px;height:34px;background:rgba(0,0,0,0.35);"></div>
-          <div class="speed-stripe"></div>
-          <div style="margin-left:-2px;">Speedpoint<sup style="font-size:11px;">®</sup></div>
-        </div>
+      <div class="hero-header">
+        <div class="circle-logo"></div>
+        <div class="divider"></div>
+        <div class="speed-stripe"></div>
+        <div class="hero-title">Speedpoint<small>®</small></div>
+      </div>
 
-        <div class="ad-card">
-          <h2>Introducing<br>our <strong>NEW</strong><br><strong style="font-size:31px;">Speedpoint</strong><sup style="font-size:14px;">®</sup><br>range</h2>
-        </div>
+      <div class="intro-card">
+        <div class="big">Introducing<br>our <strong>NEW</strong><br><strong>Speedpoint</strong><sup style="font-size:13px;">®</sup><br>range</div>
+      </div>
 
-        <div class="device-stack">
-          <div class="tablet"></div>
-          <div class="phone-card"></div>
-          <div class="terminal"></div>
-          <div class="dashboard"></div>
-          <div class="mini-printer"></div>
-          <div class="checkout">Checkout R35.00</div>
-        </div>
+      <div class="devices" aria-hidden="true">
+        <div class="screen"></div>
+        <div class="mini-device"></div>
+        <div class="device"></div>
+        <div class="monitor"></div>
+        <div class="printer"></div>
+        <div class="checkout">Checkout R35.00</div>
       </div>
     </section>
 
-    <div class="content">
-      <div class="search-box">
-        <div class="search-icon"><div class="magnifier"></div></div>
+    <main class="content">
+      <div class="search" role="button" tabindex="0" aria-label="Search help options">
+        <div class="search-left">
+          <div class="glass"></div>
+        </div>
         <div class="search-text">How can we help you?</div>
       </div>
 
-      <div class="grid">
-        <div class="feature">
-          <div class="feature-box"><div class="ico lock"></div></div>
-          <div class="feature-label">Login</div>
+      <section class="grid" aria-label="Quick actions">
+        <div class="tile">
+          <button class="tile-btn" data-panel="login">
+            <div class="tile-box"><div class="icon orange">
+              <svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="5" y="11" width="14" height="10" rx="2"/></svg>
+            </div></div>
+            <div class="tile-label">Login</div>
+          </button>
         </div>
 
-        <div class="feature">
-          <div class="feature-box"><div class="ico message"></div></div>
-          <div class="feature-label">Message</div>
+        <div class="tile">
+          <button class="tile-btn" data-panel="message">
+            <div class="tile-box"><div class="icon teal">
+              <svg viewBox="0 0 24 24"><path d="M20 14a3 3 0 0 1-3 3H9l-4 3v-3a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3z"/></svg>
+            </div></div>
+            <div class="tile-label">Message</div>
+          </button>
         </div>
 
-        <div class="feature">
-          <div class="feature-box"><div class="ico cart"></div></div>
-          <div class="feature-label">Product<br>Shop</div>
+        <div class="tile">
+          <button class="tile-btn" data-panel="shop">
+            <div class="tile-box"><div class="icon orange">
+              <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.2 9.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.7L21 8H7"/></svg>
+            </div></div>
+            <div class="tile-label">Product<br>Shop</div>
+          </button>
         </div>
 
-        <div class="feature">
-          <div class="feature-box"><div class="ico hand"></div></div>
-          <div class="feature-label">Pay</div>
+        <div class="tile">
+          <button class="tile-btn" data-panel="pay">
+            <div class="tile-box"><div class="icon teal">
+              <svg viewBox="0 0 24 24"><path d="M3 14c2.5 0 4.4-3 7-3 1.4 0 2.2.6 3 1.5"/><path d="M10 18h6.3c1.4 0 2.7-.7 3.5-1.8l1.2-1.7a1.5 1.5 0 0 0-2.1-2.1l-1.3 1.1H14"/><rect x="2" y="13" width="4" height="7" rx="1"/></svg>
+            </div></div>
+            <div class="tile-label">Pay</div>
+          </button>
         </div>
 
-        <div class="feature">
-          <div class="feature-box"><div class="ico transfer"></div></div>
-          <div class="feature-label">Transfer</div>
+        <div class="tile">
+          <button class="tile-btn" data-panel="transfer">
+            <div class="tile-box"><div class="icon teal">
+              <svg viewBox="0 0 24 24"><path d="M7 7h10"/><path d="M13 3l4 4-4 4"/><path d="M17 17H7"/><path d="M11 21l-4-4 4-4"/></svg>
+            </div></div>
+            <div class="tile-label">Transfer</div>
+          </button>
         </div>
 
-        <div class="feature">
-          <div class="feature-box">
-            <div class="ico gift">
-              <span class="bow-left"></span>
-              <span class="bow-right"></span>
-              <span class="ribbon"></span>
-            </div>
-          </div>
-          <div class="feature-label">Buy + Gift</div>
+        <div class="tile">
+          <button class="tile-btn" data-panel="gift">
+            <div class="tile-box"><div class="icon orange">
+              <svg viewBox="0 0 24 24"><path d="M20 12v8H4v-8"/><path d="M2 7h20v5H2z"/><path d="M12 7v13"/><path d="M12 7c-1.7 0-4-1-4-3a2 2 0 0 1 4 0"/><path d="M12 7c1.7 0 4-1 4-3a2 2 0 0 0-4 0"/></svg>
+            </div></div>
+            <div class="tile-label">Buy + Gift</div>
+          </button>
         </div>
 
-        <div class="feature">
-          <div class="feature-box"><div class="ico voucher"></div></div>
-          <div class="feature-label">Vouchers</div>
+        <div class="tile">
+          <button class="tile-btn" data-panel="vouchers">
+            <div class="tile-box"><div class="icon teal">
+              <svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h14v12H5a2 2 0 0 1-2-2z"/><path d="M8 9l8 6"/><path d="M16 9l-8 6"/></svg>
+            </div></div>
+            <div class="tile-label">Vouchers</div>
+          </button>
         </div>
 
-        <div class="feature">
-          <div class="feature-box"><div class="ico insure"></div></div>
-          <div class="feature-label">Insure</div>
+        <div class="tile">
+          <button class="tile-btn" data-panel="insure">
+            <div class="tile-box"><div class="icon teal">
+              <svg viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3.4 8-7 9-3.6-1-7-4-7-9V7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div></div>
+            <div class="tile-label">Insure</div>
+          </button>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <nav class="bottom-nav">
-      <div class="indicator"></div>
-      <div class="nav-items">
-        <div class="nav-item">
-          <div class="nav-icon home-icon"></div>
-          <div class="nav-text">Home</div>
-        </div>
-        <div class="nav-item">
-          <div class="nav-icon card-icon"></div>
-          <div class="nav-text">Bank</div>
-        </div>
-        <div class="nav-item">
-          <div class="nav-icon chat-icon"></div>
-          <div class="nav-text">Message</div>
-        </div>
-        <div class="nav-item">
-          <div class="nav-icon profile-icon"></div>
-          <div class="nav-text">My profile</div>
-        </div>
-        <div class="nav-item">
-          <div class="nav-icon menu-icon"><span></span></div>
-          <div class="nav-text">Menu</div>
-        </div>
+      <section class="panel" id="info-panel" aria-live="polite">
+        <div class="panel-title">Welcome</div>
+        <div class="panel-text">Tap any tile to preview that section. The layout is tuned for mobile screens so all quick actions sit neatly on one screen without spilling over like dropped groceries.</div>
+      </section>
+    </main>
+
+    <nav class="bottom">
+      <div class="active-line"></div>
+      <div class="nav">
+        <a class="nav-item" href="#" aria-label="Home">
+          <svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+          <div>Home</div>
+        </a>
+        <a class="nav-item" href="#" aria-label="Bank">
+          <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg>
+          <div>Bank</div>
+        </a>
+        <a class="nav-item" href="#" aria-label="Message">
+          <svg viewBox="0 0 24 24"><path d="M20 14a3 3 0 0 1-3 3H9l-4 3v-3a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3z"/></svg>
+          <div>Message</div>
+        </a>
+        <a class="nav-item" href="#" aria-label="My profile">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          <div>My profile</div>
+        </a>
+        <a class="nav-item" href="#" aria-label="Menu">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>
+          <div>Menu</div>
+        </a>
       </div>
     </nav>
   </div>
+
+  <script>
+    const panel = document.getElementById('info-panel');
+    const content = {
+      login: {
+        title: 'Login',
+        text: 'Secure sign-in for banking, account access, and profile verification.'
+      },
+      message: {
+        title: 'Message',
+        text: 'View notifications, service updates, and secure in-app communication.'
+      },
+      shop: {
+        title: 'Product Shop',
+        text: 'Browse point-of-sale devices, business tools, and merchant services.'
+      },
+      pay: {
+        title: 'Pay',
+        text: 'Make payments quickly using saved beneficiaries or once-off options.'
+      },
+      transfer: {
+        title: 'Transfer',
+        text: 'Move money between accounts with a clean, guided payment flow.'
+      },
+      gift: {
+        title: 'Buy + Gift',
+        text: 'Purchase vouchers, airtime, and digital products for yourself or someone else.'
+      },
+      vouchers: {
+        title: 'Vouchers',
+        text: 'Access digital voucher services with clear balances and purchase history.'
+      },
+      insure: {
+        title: 'Insure',
+        text: 'Manage cover, view policy details, and check insurance products in one place.'
+      }
+    };
+
+    const buttons = document.querySelectorAll('.tile-btn');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        buttons.forEach((b) => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        const key = btn.dataset.panel;
+        const item = content[key];
+        panel.innerHTML = `\n          <div class="panel-title">${item.title}</div>\n          <div class="panel-text">${item.text}</div>\n        `;
+      });
+    });
+  </script>
 </body>
 </html>
