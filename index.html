@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bank Login</title>
+  <title>Secure Login</title>
   <style>
     * {
       box-sizing: border-box;
@@ -80,7 +81,7 @@
 
     .input-group input {
       width: 100%;
-      padding: 14px 14px;
+      padding: 14px;
       border: 1px solid #d7deea;
       border-radius: 14px;
       font-size: 15px;
@@ -106,12 +107,11 @@
       background: linear-gradient(90deg, #0b1f3a 0%, #1f6fb2 100%);
       cursor: pointer;
       margin-top: 6px;
-      transition: transform 0.15s ease, opacity 0.15s ease;
     }
 
-    .login-btn:hover {
-      opacity: 0.96;
-      transform: translateY(-1px);
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .helper-row {
@@ -165,17 +165,39 @@
       <h1 class="title">Secure Login</h1>
       <p class="subtitle">Sign in to access your profile and continue safely.</p>
 
-      <div class="input-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter username" />
-      </div>
+      <form id="loginForm" novalidate>
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter username"
+            maxlength="30"
+            minlength="3"
+            inputmode="text"
+            autocomplete="username"
+            spellcheck="false"
+            required
+          />
+        </div>
 
-      <div class="input-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter password" />
-      </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter password"
+            maxlength="64"
+            minlength="8"
+            autocomplete="current-password"
+            required
+          />
+        </div>
 
-      <button class="login-btn" onclick="login()">Login</button>
+        <button type="submit" class="login-btn" id="loginBtn">Login</button>
+      </form>
 
       <div id="message" class="message"></div>
 
@@ -191,19 +213,107 @@
   </div>
 
   <script>
-    function login() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const message = document.getElementById("message");
+    const loginForm = document.getElementById("loginForm");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const message = document.getElementById("message");
+    const loginBtn = document.getElementById("loginBtn");
 
-      if (username === "admin" && password === "1234") {
-        message.style.color = "#00a651";
-        message.textContent = "Login successful";
-      } else {
-        message.style.color = "#dc2626";
-        message.textContent = "Invalid username or password";
-      }
+    let failedAttempts = 0;
+    let lockUntil = 0;
+
+    function setMessage(text, color) {
+      message.textContent = text; // safer than innerHTML
+      message.style.color = color;
     }
+
+    function sanitizeUsername(value) {
+      return value.replace(/[^a-zA-Z0-9._-]/g, "").trim();
+    }
+
+    function basicPasswordCheck(value) {
+      // do not over-sanitize passwords, just reject control chars
+      return !/[\u0000-\u001F\u007F]/.test(value);
+    }
+
+    function isLocked() {
+      return Date.now() < lockUntil;
+    }
+
+    usernameInput.addEventListener("input", () => {
+      const cleaned = sanitizeUsername(usernameInput.value);
+      if (usernameInput.value !== cleaned) {
+        usernameInput.value = cleaned;
+      }
+    });
+
+    usernameInput.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const pasted = (e.clipboardData || window.clipboardData).getData("text");
+      usernameInput.value = sanitizeUsername(pasted).slice(0, 30);
+    });
+
+    passwordInput.addEventListener("paste", (e) => {
+      const pasted = (e.clipboardData || window.clipboardData).getData("text");
+      if (/[\u0000-\u001F\u007F]/.test(pasted)) {
+        e.preventDefault();
+        setMessage("Unsafe characters blocked.", "#dc2626");
+      }
+    });
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      if (isLocked()) {
+        const seconds = Math.ceil((lockUntil - Date.now()) / 1000);
+        setMessage(`Too many attempts. Try again in ${seconds}s.`, "#dc2626");
+        return;
+      }
+
+      const username = sanitizeUsername(usernameInput.value);
+      const password = passwordInput.value;
+
+      if (username.length < 3 || username.length > 30) {
+        setMessage("Username must be 3 to 30 valid characters.", "#dc2626");
+        return;
+      }
+
+      if (!basicPasswordCheck(password)) {
+        setMessage("Password contains blocked characters.", "#dc2626");
+        return;
+      }
+
+      if (password.length < 8 || password.length > 64) {
+        setMessage("Password must be 8 to 64 characters.", "#dc2626");
+        return;
+      }
+
+      loginBtn.disabled = true;
+      setMessage("Checking credentials...", "#1f6fb2");
+
+      setTimeout(() => {
+        // demo-only check
+        if (username === "admin" && password === "SecurePass123") {
+          failedAttempts = 0;
+          setMessage("Login successful.", "#00a651");
+        } else {
+          failedAttempts += 1;
+          setMessage("Invalid username or password.", "#dc2626");
+
+          if (failedAttempts >= 5) {
+            lockUntil = Date.now() + 30000;
+            setMessage("Too many attempts. Locked for 30 seconds.", "#dc2626");
+          }
+        }
+
+        loginBtn.disabled = false;
+      }, 800);
+    });
+
+    document.addEventListener("contextmenu", (e) => {
+      // optional: light friction only, not real security
+      // e.preventDefault();
+    });
   </script>
 </body>
 </html>
