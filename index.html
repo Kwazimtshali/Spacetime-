@@ -1,1060 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Bank App UI</title>
-  <style>
-    :root {
-      --bg: #f3f3f3;
-      --surface: #ffffff;
-      --text: #121212;
-      --muted: #74787c;
-      --line: #d9d9d9;
-      --teal: #08a8ad;
-      --orange: #eb992c;
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html, body {
-      margin: 0;
-      min-height: 100%;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #e7e7e7;
-      color: var(--text);
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-    }
-
-    button, input {
-      font: inherit;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      background: var(--bg);
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .topbar {
-      height: 76px;
-      padding: 0 22px 16px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-end;
-      background: #fff;
-    }
-
-    .qr {
-      width: 28px;
-      height: 28px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 3px;
-    }
-
-    .qr span {
-      border: 2.5px solid #111;
-      border-radius: 1px;
-      background: #fff;
-    }
-
-    .hero {
-      height: 220px;
-      position: relative;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 20% 55%, rgba(255,255,255,.34), transparent 28%),
-        radial-gradient(circle at 82% 24%, rgba(255,255,255,.18), transparent 18%),
-        linear-gradient(135deg, #8bd0d4 0%, #9cdbde 42%, #63bec6 100%);
-      border-top: 1px solid rgba(0,0,0,.04);
-    }
-
-    .hero-header {
-      position: absolute;
-      top: 16px;
-      left: 18px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 2;
-    }
-
-    .circle-logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 4px solid var(--teal);
-      background: #efb030;
-      display: grid;
-      place-items: center;
-      position: relative;
-      overflow: hidden;
-      flex: 0 0 auto;
-    }
-
-    .circle-logo::before {
-      content: "";
-      width: 18px;
-      height: 18px;
-      border: 3.5px solid #111;
-      border-left-color: transparent;
-      border-top-color: transparent;
-      border-radius: 50%;
-      transform: rotate(45deg);
-      position: absolute;
-    }
-
-    .divider {
-      width: 2px;
-      height: 30px;
-      background: rgba(0,0,0,.3);
-    }
-
-    .speed-stripe {
-      width: 32px;
-      height: 16px;
-      transform: skewX(-28deg);
-      background: linear-gradient(135deg, #0f95a7 0 50%, #f0aa33 50% 100%);
-      border-radius: 2px;
-      margin-right: -2px;
-    }
-
-    .hero-title {
-      font-size: 18px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .hero-title small {
-      font-size: 11px;
-    }
-
-    .intro-card {
-      position: absolute;
-      left: 16px;
-      top: 94px;
-      width: min(60vw, 250px);
-      max-width: 250px;
-      height: 138px;
-      border-radius: 22px;
-      border: 3px solid #259fb2;
-      background: linear-gradient(90deg, rgba(8,171,191,.92), rgba(189,240,242,.82));
-      box-shadow: inset 0 0 34px rgba(255,255,255,.18);
-      padding: 17px 18px;
-      z-index: 1;
-    }
-
-    .intro-card .big {
-      font-size: clamp(23px, 4.3vw, 28px);
-      line-height: 1.03;
-      font-weight: 400;
-      letter-spacing: -.3px;
-    }
-
-    .intro-card .big strong {
-      font-weight: 800;
-      font-size: clamp(25px, 4.8vw, 31px);
-    }
-
-    .devices {
-      position: absolute;
-      right: -8px;
-      top: 18px;
-      width: min(54vw, 220px);
-      height: 188px;
-      z-index: 2;
-    }
-
-    .screen, .device, .monitor, .mini-device {
-      position: absolute;
-      background: #f8fbfc;
-      border: 2px solid #212a2d;
-      box-shadow: 0 10px 22px rgba(0,0,0,.16);
-      overflow: hidden;
-    }
-
-    .screen::before, .device::before, .monitor::before, .mini-device::before {
-      content: "";
-      position: absolute;
-      inset: 6px;
-      border-radius: 8px;
-      background: linear-gradient(180deg, #fdfefe 0%, #eef5f6 100%);
-    }
-
-    .screen {
-      width: 156px;
-      height: 96px;
-      right: 22px;
-      top: 5px;
-      border-radius: 10px;
-      transform: rotate(-9deg) scale(.94);
-    }
-
-    .screen::after {
-      content: "";
-      position: absolute;
-      inset: 14px;
-      background:
-        linear-gradient(#d8ecef 0 0) 0 0/100% 12px no-repeat,
-        linear-gradient(#c7dfe2 0 0) 10px 24px/22px 8px no-repeat,
-        linear-gradient(#c7dfe2 0 0) 46px 24px/22px 8px no-repeat,
-        linear-gradient(#c7dfe2 0 0) 82px 24px/22px 8px no-repeat,
-        linear-gradient(#a2d5d8 0 0) 10px 44px/48px 26px no-repeat,
-        linear-gradient(#e6efef 0 0) 64px 44px/56px 26px no-repeat;
-      border-radius: 6px;
-    }
-
-    .device {
-      width: 55px;
-      height: 103px;
-      right: 109px;
-      bottom: 2px;
-      border-radius: 10px;
-      transform: rotate(-7deg) scale(.94);
-    }
-
-    .device::after {
-      content: "";
-      position: absolute;
-      inset: 12px 10px 14px;
-      background:
-        linear-gradient(#38c36d 0 0) 0 0/100% 16px no-repeat,
-        linear-gradient(#735cff 0 0) 0 22px/18px 16px no-repeat,
-        linear-gradient(#f3a12b 0 0) 23px 22px/18px 16px no-repeat,
-        linear-gradient(#13a8ad 0 0) 0 43px/18px 16px no-repeat,
-        linear-gradient(#f06b6b 0 0) 23px 43px/18px 16px no-repeat;
-      border-radius: 8px;
-    }
-
-    .mini-device {
-      width: 42px;
-      height: 84px;
-      right: 149px;
-      bottom: 6px;
-      border-radius: 10px;
-      transform: rotate(11deg) scale(.94);
-    }
-
-    .mini-device::after {
-      content: "";
-      position: absolute;
-      inset: 12px 8px 14px;
-      background:
-        linear-gradient(#ffffff 0 0) 0 0/100% 50px no-repeat,
-        linear-gradient(#efaa2c 0 0) 0 56px/100% 10px no-repeat;
-      border-radius: 6px;
-    }
-
-    .monitor {
-      width: 126px;
-      height: 88px;
-      right: 2px;
-      bottom: 0;
-      border-radius: 8px;
-      transform: rotate(2deg) scale(.94);
-    }
-
-    .monitor::after {
-      content: "";
-      position: absolute;
-      inset: 12px 10px;
-      background:
-        linear-gradient(#dcecef 0 0) 0 0/100% 12px no-repeat,
-        linear-gradient(#89c9cf 0 0) 10px 26px/42px 4px no-repeat,
-        linear-gradient(#89c9cf 0 0) 10px 34px/54px 4px no-repeat,
-        linear-gradient(#89c9cf 0 0) 10px 42px/34px 4px no-repeat,
-        linear-gradient(#e6efef 0 0) 72px 24px/30px 24px no-repeat;
-      border-radius: 6px;
-    }
-
-    .printer {
-      position: absolute;
-      right: 14px;
-      top: 108px;
-      width: 42px;
-      height: 22px;
-      background: linear-gradient(180deg, #1ab2be, #0a9fa7);
-      border: 2px solid #233237;
-      border-radius: 8px;
-      transform: rotate(-14deg);
-      box-shadow: 0 8px 16px rgba(0,0,0,.14);
-    }
-
-    .checkout {
-      position: absolute;
-      right: 20px;
-      top: 118px;
-      background: var(--orange);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 4px;
-      transform: rotate(-8deg);
-      box-shadow: 0 4px 10px rgba(0,0,0,.14);
-    }
-
-    .content {
-      padding: 18px 16px 108px;
-    }
-
-    .search {
-      height: 72px;
-      background: #fff;
-      border: 2px solid var(--line);
-      border-radius: 30px;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .search-left {
-      width: 88px;
-      height: 100%;
-      background: var(--teal);
-      border-top-right-radius: 20px;
-      border-bottom-right-radius: 20px;
-      display: grid;
-      place-items: center;
-      flex: 0 0 auto;
-    }
-
-    .glass {
-      width: 32px;
-      height: 32px;
-      border: 4px solid #fff;
-      border-radius: 50%;
-      position: relative;
-    }
-
-    .glass::after {
-      content: "";
-      position: absolute;
-      width: 14px;
-      height: 4px;
-      border-radius: 4px;
-      background: #fff;
-      right: -8px;
-      bottom: 1px;
-      transform: rotate(45deg);
-    }
-
-    .search-text {
-      padding-left: 18px;
-      padding-right: 10px;
-      font-size: clamp(19px, 5vw, 27px);
-      color: #787878;
-      letter-spacing: -.3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .grid {
-      margin-top: 24px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 20px 12px;
-      align-items: start;
-    }
-
-    .tile-btn,
-    .account-tile-btn,
-    .nav-item {
-      appearance: none;
-      border: 0;
-      background: transparent;
-      text-decoration: none;
-      color: inherit;
-      cursor: pointer;
-    }
-
-    .tile-btn {
-      width: 100%;
-      padding: 0;
-      text-align: center;
-    }
-
-    .tile-box {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      margin: 0 auto 10px;
-      border: 2px solid #d8d8d8;
-      background: #fff;
-      border-radius: 22px;
-      display: grid;
-      place-items: center;
-      min-height: 76px;
-      max-width: 94px;
-    }
-
-    .tile-label {
-      font-size: clamp(14px, 3.8vw, 19px);
-      line-height: 1.1;
-      min-height: 2.3em;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .icon svg,
-    .account-icon svg {
-      width: min(48px, 56%);
-      height: min(48px, 56%);
-      stroke-width: 2.2;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .icon.orange svg { stroke: var(--orange); }
-    .icon.teal svg,
-    .account-icon svg { stroke: var(--teal); }
-
-    .panel {
-      margin-top: 18px;
-      background: var(--surface);
-      border: 1px solid #dfdfdf;
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: 0 8px 22px rgba(0,0,0,.04);
-    }
-
-    .panel-title {
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .panel-text {
-      color: #6d6d6d;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .login-screen {
-      min-height: 100vh;
-      background: #f5f5f5;
-      padding: 14px 8px 100px;
-    }
-
-    .login-search-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .login-search-label {
-      color: var(--teal);
-      font-size: 10px;
-      line-height: 1.3;
-      padding-top: 8px;
-    }
-
-    .login-logo-circle {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: #efb030;
-      border: 2px solid #111;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .login-logo-circle::before,
-    .login-logo-circle::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 50%;
-      border: 2px solid #111;
-      border-left-color: transparent;
-      border-right-color: transparent;
-    }
-
-    .login-logo-circle::before {
-      width: 24px;
-      height: 24px;
-      top: 7px;
-    }
-
-    .login-logo-circle::after {
-      width: 16px;
-      height: 16px;
-      top: 13px;
-    }
-
-    .login-greeting {
-      color: #4e8d94;
-      font-size: 10px;
-      line-height: 1.45;
-      margin: 0 0 16px;
-      max-width: 270px;
-    }
-
-    .field-label {
-      display: block;
-      color: #5e5e5e;
-      font-size: 11px;
-      margin-bottom: 6px;
-    }
-
-    .password-wrap {
-      position: relative;
-      margin-bottom: 14px;
-    }
-
-    .password-input {
-      width: 100%;
-      height: 40px;
-      border: 0;
-      border-bottom: 1px solid #d6d6d6;
-      background: transparent;
-      padding: 0 58px 0 0;
-      font-size: 13px;
-      color: #222;
-      outline: none;
-    }
-
-    .password-input::placeholder { color: #b0b0b0; }
-
-    .show-btn {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      background: transparent;
-      border: 0;
-      color: #c2c2c2;
-      font-size: 10px;
-      padding: 4px 0;
-      cursor: pointer;
-    }
-
-    .login-primary,
-    .login-secondary,
-    .cancel-btn {
-      width: 100%;
-      height: 36px;
-      border-radius: 7px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    .login-primary {
-      border: 0;
-      background: #e99a2d;
-      color: #fff;
-      margin-bottom: 10px;
-    }
-
-    .login-secondary {
-      border: 1px solid #d7d7d7;
-      background: #fafafa;
-      color: #444;
-      margin-bottom: 12px;
-    }
-
-    .login-code {
-      font-size: 8px;
-      color: #9b9b9b;
-      letter-spacing: .2px;
-    }
-
-    .cancel-btn {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: calc(16px + env(safe-area-inset-bottom));
-      width: calc(100% - 16px);
-      max-width: 414px;
-      background: #f8f8f8;
-      border: 1px solid #dddddd;
-      color: #333;
-      text-align: left;
-      padding: 0 14px;
-      z-index: 31;
-    }
-
-    .account-screen {
-      min-height: 100vh;
-      background: #f3f3f3;
-      padding: 0 16px 110px;
-    }
-
-    .account-top-strip {
-      height: 24px;
-      margin: 0 -16px 18px;
-      background: linear-gradient(90deg, #dbdbdb 0 56%, #07a8ad 56% 100%);
-      border-bottom: 1px solid #d7d7d7;
-      position: relative;
-    }
-
-    .account-top-strip::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 9px;
-      height: 2px;
-      background: rgba(255,255,255,.55);
-    }
-
-    .account-card-wrap {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 22px;
-    }
-
-    .account-card-visual {
-      width: min(72vw, 350px);
-      max-width: 350px;
-      aspect-ratio: 1.58 / 1;
-      border-radius: 16px;
-      background:
-        radial-gradient(circle at 58% 52%, rgba(0,0,0,.65) 0 16%, transparent 17% 100%),
-        radial-gradient(circle at 57% 52%, rgba(12,179,192,.22) 0 29%, transparent 30% 100%),
-        radial-gradient(circle at 57% 52%, rgba(255,255,255,.08) 0 45%, transparent 46% 100%),
-        radial-gradient(circle at 10% 80%, rgba(0,192,203,.45) 0 18%, transparent 19% 100%),
-        linear-gradient(135deg, #07151a 0%, #041015 40%, #07151a 100%);
-      box-shadow: 0 10px 28px rgba(0,0,0,.16);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .account-card-visual::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 18% 74%, rgba(16,187,194,.45) 0 22%, transparent 23%),
-        radial-gradient(circle at 56% 52%, transparent 0 24%, rgba(16,187,194,.75) 24.5% 25.5%, transparent 26% 100%);
-      opacity: .9;
-    }
-
-    .card-name {
-      position: absolute;
-      top: 16px;
-      left: 20px;
-      font-size: clamp(12px, 2.2vw, 18px);
-      font-weight: 700;
-      color: #d8e8ec;
-      z-index: 2;
-    }
-
-    .card-name span { color: #0db1ba; }
-
-    .card-tap {
-      position: absolute;
-      left: 14px;
-      top: 74px;
-      color: #17b8c4;
-      font-size: 18px;
-      z-index: 2;
-    }
-
-    .card-mark {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      z-index: 2;
-    }
-
-    .card-mark-circle {
-      width: 88px;
-      height: 88px;
-      border-radius: 50%;
-      border: 4px solid #0db1ba;
-      position: relative;
-    }
-
-    .card-mark-circle::before,
-    .card-mark-circle::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      border-radius: 50%;
-      border: 4px solid #0db1ba;
-      border-left-color: transparent;
-      border-right-color: transparent;
-    }
-
-    .card-mark-circle::before {
-      width: 44px;
-      height: 44px;
-      top: 16px;
-    }
-
-    .card-mark-circle::after {
-      width: 28px;
-      height: 28px;
-      top: 24px;
-    }
-
-    .visa {
-      position: absolute;
-      right: 16px;
-      bottom: 12px;
-      font-size: clamp(20px, 4.2vw, 30px);
-      font-style: italic;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -.5px;
-      z-index: 2;
-    }
-
-    .account-title {
-      font-size: clamp(24px, 5.5vw, 42px);
-      line-height: 1.08;
-      font-weight: 700;
-      margin: 0 0 22px;
-      letter-spacing: -.7px;
-    }
-
-    .account-stats {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10px 16px;
-      align-items: center;
-      margin-bottom: 34px;
-    }
-
-    .stat-label,
-    .stat-value {
-      font-size: clamp(20px, 5vw, 34px);
-      line-height: 1.1;
-      color: #73777c;
-      letter-spacing: -.3px;
-    }
-
-    .stat-value {
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .account-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 26px 16px;
-      align-items: start;
-    }
-
-    .account-tile-btn {
-      width: 100%;
-      padding: 0;
-      text-align: center;
-    }
-
-    .account-tile-box {
-      width: 100%;
-      max-width: 120px;
-      aspect-ratio: 1 / 1;
-      margin: 0 auto 14px;
-      background: #fafafa;
-      border: 2px solid #d9d9d9;
-      border-radius: 24px;
-      display: grid;
-      place-items: center;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
-    }
-
-    .account-tile-label {
-      font-size: clamp(14px, 3.7vw, 26px);
-      line-height: 1.12;
-      letter-spacing: -.3px;
-      min-height: 2.6em;
-    }
-
-    .bottom {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0;
-      width: 100%;
-      max-width: 430px;
-      background: #fff;
-      border-top: 1px solid #d8d8d8;
-      padding: 12px 8px calc(14px + env(safe-area-inset-bottom));
-      z-index: 30;
-    }
-
-    .active-line {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 74px;
-      height: 4px;
-      background: #111;
-      border-radius: 0 0 4px 0;
-    }
-
-    .nav {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      text-align: center;
-      gap: 2px;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 4px 2px 0;
-      font-size: 12px;
-    }
-
-    .nav-item svg {
-      width: 29px;
-      height: 29px;
-      stroke: #111;
-      stroke-width: 2.2;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      margin-bottom: 8px;
-    }
-
-    @media (max-width: 380px) {
-      .content, .account-screen { padding-left: 12px; padding-right: 12px; }
-      .grid { gap: 18px 10px; }
-      .account-top-strip { margin-left: -12px; margin-right: -12px; }
-      .account-grid { gap: 22px 10px; }
-      .account-title { font-size: 22px; }
-      .stat-label, .stat-value { font-size: 16px; }
-      .account-tile-label { font-size: 12px; }
-      .devices { transform: scale(.9); transform-origin: top right; right: -18px; }
-      .intro-card { left: 12px; width: min(58vw, 225px); height: 128px; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Flyer - CV Transformation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 32px;
+        }
+
+        /* Flyer Card */
+        .flyer {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* inner padding */
+        .flyer-inner {
+            padding: 40px 40px 32px 40px;
+        }
+
+        /* header area */
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #1E3A8A, #2563EB);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .tagline {
+            text-align: center;
+            color: #2d3e50;
+            font-size: 1rem;
+            border-top: 1px solid #eef2ff;
+            border-bottom: 1px solid #eef2ff;
+            padding: 16px 0;
+            margin-bottom: 28px;
+            font-weight: 500;
+            background: #F8FAFE;
+            border-radius: 40px;
+        }
+
+        /* section titles */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0F2B4D;
+            border-left: 5px solid #F59E0B;
+            padding-left: 16px;
+            margin: 28px 0 16px 0;
+        }
+
+        .steps-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            margin-top: 12px;
+        }
+
+        .step-card {
+            flex: 1;
+            min-width: 180px;
+            background: #F9FAFB;
+            border-radius: 24px;
+            padding: 20px 16px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+            border: 1px solid #EDF2F7;
+            transition: transform 0.2s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-4px);
+            border-color: #CBD5E1;
+        }
+
+        .step-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: #1E3A8A;
+            color: white;
+            width: 48px;
+            height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 60px;
+            margin-bottom: 12px;
+        }
+
+        .step-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin: 12px 0 8px;
+            color: #1E293B;
+        }
+
+        .step-desc {
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        .packages {
+            background: #F1F5F9;
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin: 20px 0 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .package-option {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .package-option span {
+            background: white;
+            padding: 5px 12px;
+            border-radius: 40px;
+            margin-left: 8px;
+            font-weight: 600;
+            color: #1E3A8A;
+        }
+
+        .contact-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            background: #EFF6FF;
+            border-radius: 28px;
+            padding: 12px 20px;
+            margin: 20px 0;
+        }
+
+        .whatsapp {
+            background: #25D366;
+            padding: 8px 18px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+            margin: 12px 0;
+        }
+
+        .tool-badge {
+            background: #F1F3F5;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .guarantee {
+            background: #FEF9E3;
+            padding: 16px 20px;
+            border-radius: 24px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .process-flow {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .flow-step {
+            background: white;
+            border: 1px solid #CBD5E1;
+            border-radius: 60px;
+            padding: 6px 16px;
+        }
+
+        .payment-icons {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+            font-weight: 700;
+            color: #1F3A6B;
+            border-top: 2px solid #EEF2FF;
+            padding-top: 24px;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c757d;
+            margin-top: 18px;
+        }
+
+        hr {
+            margin: 12px 0;
+            border-color: #e9ecef;
+        }
+
+        .small-badge {
+            font-size: 0.7rem;
+            background: #E6F0FF;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 30px;
+        }
+
+        @media (max-width: 650px) {
+            .flyer-inner {
+                padding: 24px;
+            }
+            .header h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <div class="topbar" id="topbar">
-      <div class="qr" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-    </div>
-
-    <section class="hero" id="hero">
-      <div class="hero-header">
-        <div class="circle-logo"></div>
-        <div class="divider"></div>
-        <div class="speed-stripe"></div>
-        <div class="hero-title">Speedpoint<small>®</small></div>
-      </div>
-
-      <div class="intro-card">
-        <div class="big">Introducing<br>our <strong>NEW</strong><br><strong>Speedpoint</strong><sup style="font-size:13px;">®</sup><br>range</div>
-      </div>
-
-      <div class="devices" aria-hidden="true">
-        <div class="screen"></div>
-        <div class="mini-device"></div>
-        <div class="device"></div>
-        <div class="monitor"></div>
-        <div class="printer"></div>
-        <div class="checkout">Checkout R35.00</div>
-      </div>
-    </section>
-
-    <main class="content" id="home-screen">
-      <div class="search" role="button" tabindex="0" aria-label="Search help options">
-        <div class="search-left"><div class="glass"></div></div>
-        <div class="search-text">How can we help you?</div>
-      </div>
-
-      <section class="grid" aria-label="Quick actions">
-        <div class="tile"><button class="tile-btn" data-panel="login" data-screen="login-screen"><div class="tile-box"><div class="icon orange"><svg viewBox="0 0 24 24"><path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="5" y="11" width="14" height="10" rx="2"/></svg></div></div><div class="tile-label">Login</div></button></div>
-        <div class="tile"><button class="tile-btn" data-panel="message"><div class="tile-box"><div class="icon teal"><svg viewBox="0 0 24 24"><path d="M20 14a3 3 0 0 1-3 3H9l-4 3v-3a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3z"/></svg></div></div><div class="tile-label">Message</div></button></div>
-        <div class="tile"><button class="tile-btn" data-panel="shop"><div class="tile-box"><div class="icon orange"><svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M3 4h2l2.2 9.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.7L21 8H7"/></svg></div></div><div class="tile-label">Product<br>Shop</div></button></div>
-        <div class="tile"><button class="tile-btn" data-panel="pay"><div class="tile-box"><div class="icon teal"><svg viewBox="0 0 24 24"><path d="M3 14c2.5 0 4.4-3 7-3 1.4 0 2.2.6 3 1.5"/><path d="M10 18h6.3c1.4 0 2.7-.7 3.5-1.8l1.2-1.7a1.5 1.5 0 0 0-2.1-2.1l-1.3 1.1H14"/><rect x="2" y="13" width="4" height="7" rx="1"/></svg></div></div><div class="tile-label">Pay</div></button></div>
-        <div class="tile"><button class="tile-btn" data-panel="transfer"><div class="tile-box"><div class="icon teal"><svg viewBox="0 0 24 24"><path d="M7 7h10"/><path d="M13 3l4 4-4 4"/><path d="M17 17H7"/><path d="M11 21l-4-4 4-4"/></svg></div></div><div class="tile-label">Transfer</div></button></div>
-        <div class="tile"><button class="tile-btn" data-panel="gift"><div class="tile-box"><div class="icon orange"><svg viewBox="0 0 24 24"><path d="M20 12v8H4v-8"/><path d="M2 7h20v5H2z"/><path d="M12 7v13"/><path d="M12 7c-1.7 0-4-1-4-3a2 2 0 0 1 4 0"/><path d="M12 7c1.7 0 4-1 4-3a2 2 0 0 0-4 0"/></svg></div></div><div class="tile-label">Buy + Gift</div></button></div>
-        <div class="tile"><button class="tile-btn" data-panel="vouchers"><div class="tile-box"><div class="icon teal"><svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h14v12H5a2 2 0 0 1-2-2z"/><path d="M8 9l8 6"/><path d="M16 9l-8 6"/></svg></div></div><div class="tile-label">Vouchers</div></button></div>
-        <div class="tile"><button class="tile-btn" data-panel="insure"><div class="tile-box"><div class="icon teal"><svg viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3.4 8-7 9-3.6-1-7-4-7-9V7z"/><circle cx="12" cy="12" r="3"/></svg></div></div><div class="tile-label">Insure</div></button></div>
-      </section>
-
-      <section class="panel" id="info-panel" aria-live="polite">
-        <div class="panel-title">Welcome</div>
-        <div class="panel-text">Tap Login to open the sign-in screen, then enter any password to continue to the account page.</div>
-      </section>
-    </main>
-
-    <main class="login-screen hidden" id="login-screen">
-      <div class="login-search-row">
-        <div class="login-search-label">How can we help you?</div>
-        <div class="login-logo-circle" aria-hidden="true"></div>
-      </div>
-
-      <p class="login-greeting">Hi Jennifer Ferreira, please enter your PIN Online Banking password to login</p>
-
-      <label class="field-label" for="password">Password:</label>
-      <div class="password-wrap">
-        <input id="password" class="password-input" type="password" placeholder="Enter Password" />
-        <button class="show-btn" type="button" id="toggle-password">SHOW</button>
-      </div>
-
-      <button class="login-primary" type="button" id="login-submit">Login</button>
-      <button class="login-secondary" type="button">Forgot Password</button>
-      <div class="login-code">532-412-525</div>
-
-      <button class="cancel-btn" type="button" id="back-home">Cancel</button>
-    </main>
-
-    <main class="account-screen hidden" id="account-screen">
-      <div class="account-top-strip"></div>
-
-      <div class="account-card-wrap">
-        <div class="account-card-visual" aria-hidden="true">
-          <div class="card-name">Business <span>Debit</span> Card</div>
-          <div class="card-tap">)))</div>
-          <div class="card-mark"><div class="card-mark-circle"></div></div>
-          <div class="visa">VISA</div>
+<div class="flyer">
+    <div class="flyer-inner">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>⚡ ELEVATE YOUR PROFESSIONAL BRAND</h1>
+            <div class="tagline">
+                Transforming static printed documents into dynamic digital assets.<br>
+                We rewrite your story for impact, including all new experience and qualifications.
+            </div>
         </div>
-      </div>
 
-      <h1 class="account-title">Debit Account</h1>
+        <!-- SEAMLESS PROCESS -->
+        <div class="section-title">📸 OUR SEAMLESS PROCESS: SNAPSHOT UPGRADE</div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1️⃣</div>
+                <div class="step-title">STEP 1: SNAP & SEND A PHOTO</div>
+                <div class="step-desc">Just send us a clear picture of your existing paper or outdated CV/documents via WhatsApp.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2️⃣</div>
+                <div class="step-title">STEP 2: RETYPE & INCLUDE ALL INFO</div>
+                <div class="step-desc">Our professional typists retype the entire content, seamlessly integrating all new qualifications or experience.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3️⃣</div>
+                <div class="step-title">STEP 3: MERGE & DELIVER FINAL PDF PACK</div>
+                <div class="step-desc">Receive a flawlessly formatted digital PDF package that includes your qualifications and references.</div>
+            </div>
+        </div>
 
-      <section class="account-stats" aria-label="Account balances">
-        <div class="stat-label">Account Number</div>
-        <div class="stat-value">63070511829</div>
-        <div class="stat-label">Balance</div>
-        <div class="stat-value">R1 450 6782</div>
-        <div class="stat-label">Available</div>
-        <div class="stat-value">R1 226 8196</div>
-      </section>
+        <!-- COMPLETE DIGITAL TRANSFORMATION -->
+        <div class="section-title">📁 THE COMPLETE DIGITAL TRANSFORMATION</div>
+        <div class="packages">
+            <div class="package-option">📄 SNAP & UPGRADE PACKAGES:</div>
+            <div class="package-option">Type & Update <span>R250</span></div>
+            <div class="package-option">Full Digital Portfolio <span>R450</span></div>
+            <div class="small-badge">Contact for custom quotes</div>
+        </div>
 
-      <section class="account-grid" aria-label="Account actions">
-        <div><button class="account-tile-btn" type="button"><div class="account-tile-box"><div class="account-icon"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="14" height="9" rx="1.8"/><path d="M8 18h12"/><rect x="6" y="10" width="12" height="8" rx="1.8"/></svg></div></div><div class="account-tile-label">My Cards</div></button></div>
-        <div><button class="account-tile-btn" type="button"><div class="account-tile-box"><div class="account-icon"><svg viewBox="0 0 24 24"><path d="M20 12v8H4v-8"/><path d="M2 7h20v5H2z"/><path d="M12 7v13"/><path d="M12 7c-1.7 0-4-1-4-3a2 2 0 0 1 4 0"/><path d="M12 7c1.7 0 4-1 4-3a2 2 0 0 0-4 0"/></svg></div></div><div class="account-tile-label">Buy + Gift</div></button></div>
-        <div><button class="account-tile-btn" type="button"><div class="account-tile-box"><div class="account-icon"><svg viewBox="0 0 24 24"><path d="M3 14c2.5 0 4.4-3 7-3 1.4 0 2.2.6 3 1.5"/><path d="M10 18h6.3c1.4 0 2.7-.7 3.5-1.8l1.2-1.7a1.5 1.5 0 0 0-2.1-2.1l-1.3 1.1H14"/><rect x="2" y="13" width="4" height="7" rx="1"/></svg></div></div><div class="account-tile-label">Pay</div></button></div>
-        <div><button class="account-tile-btn" type="button"><div class="account-tile-box"><div class="account-icon"><svg viewBox="0 0 24 24"><path d="M7 7h10"/><path d="M13 3l4 4-4 4"/><path d="M17 17H7"/><path d="M11 21l-4-4 4-4"/></svg></div></div><div class="account-tile-label">Transfer</div></button></div>
-        <div><button class="account-tile-btn" type="button"><div class="account-tile-box"><div class="account-icon"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8"/><path d="M8 13h4"/><path d="M8 17h8"/></svg></div></div><div class="account-tile-label">Detailed Balance</div></button></div>
-        <div><button class="account-tile-btn" type="button"><div class="account-tile-box"><div class="account-icon"><svg viewBox="0 0 24 24"><path d="M7 4v4"/><path d="M17 4v4"/><rect x="4" y="6" width="10" height="9" rx="2"/><rect x="14" y="12" width="6" height="8" rx="1.5"/><path d="M7 10h4"/></svg></div></div><div class="account-tile-label">My Debit Orders</div></button></div>
-        <div><button class="account-tile-btn" type="button"><div class="account-tile-box"><div class="account-icon"><svg viewBox="0 0 24 24"><path d="M6 4h8l4 4v12H6z"/><path d="M14 4v4h4"/><path d="M9 12h5"/><path d="M9 16h6"/><rect x="14" y="12" width="4" height="8" rx="1"/></svg></div></div><div class="account-tile-label">Debit order mandates</div></button></div>
-        <div><button class="account-tile-btn" type="button"><div class="account-tile-box"><div class="account-icon"><svg viewBox="0 0 24 24"><rect x="4" y="6" width="14" height="8" rx="1.8"/><path d="M8 10h6"/><circle cx="18" cy="16" r="4"/><path d="M15.8 16h4.4"/></svg></div></div><div class="account-tile-label">Stop Pay- ment History</div></button></div>
-      </section>
-    </main>
+        <!-- CONTACT & WHATSAPP -->
+        <div class="contact-row">
+            <span style="font-weight: 700;">📞 CONTACT US</span>
+            <div class="whatsapp">
+                💬 CHAT WITH US ON WHATSAPP &nbsp;👉 <strong>067 630 7144</strong>
+            </div>
+        </div>
 
-    <nav class="bottom" id="bottom-nav">
-      <div class="active-line"></div>
-      <div class="nav">
-        <button class="nav-item" type="button"><svg viewBox="0 0 24 24"><path d="M3 10.5L12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><div>Home</div></button>
-        <button class="nav-item" type="button"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><div>Bank</div></button>
-        <button class="nav-item" type="button"><svg viewBox="0 0 24 24"><path d="M20 14a3 3 0 0 1-3 3H9l-4 3v-3a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3z"/></svg><div>Message</div></button>
-        <button class="nav-item" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><div>My profile</div></button>
-        <button class="nav-item" type="button"><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg><div>Menu</div></button>
-      </div>
-    </nav>
-  </div>
+        <!-- TOOLS OF THE TRADE -->
+        <div class="section-title">🛠️ TOOLS OF THE TRADE</div>
+        <div class="tools">
+            <span class="tool-badge">Adobe</span>
+            <span class="tool-badge">Microsoft Office</span>
+            <span class="tool-badge">LivePDF</span>
+            <span class="tool-badge">Foxit</span>
+            <span class="tool-badge">Z3</span>
+            <span class="tool-badge">🤖 AI-powered matching</span>
+        </div>
 
-  <script>
-    const homeScreen = document.getElementById('home-screen');
-    const loginScreen = document.getElementById('login-screen');
-    const accountScreen = document.getElementById('account-screen');
-    const hero = document.getElementById('hero');
-    const topbar = document.getElementById('topbar');
-    const bottomNav = document.getElementById('bottom-nav');
-    const infoPanel = document.getElementById('info-panel');
-    const passwordInput = document.getElementById('password');
-    const togglePassword = document.getElementById('toggle-password');
-    const loginSubmit = document.getElementById('login-submit');
-    const backHome = document.getElementById('back-home');
+        <!-- SATISFACTION GUARANTEED + SUPPORT AGENT -->
+        <div class="guarantee">
+            <div><strong>✅ SATISFACTION GUARANTEED</strong><br>
+                <span style="font-size: 0.8rem;">✔ Secure & Compliant ✔ Fast Turnaround ✔ Consolidated CV & References</span>
+            </div>
+            <div><strong>🛡️ SUPPORT AGENT:</strong> 24/7 WhatsApp support</div>
+        </div>
 
-    const content = {
-      login: ['Login', 'Open the secure sign-in screen.'],
-      message: ['Message', 'View service messages and in-app communication.'],
-      shop: ['Product Shop', 'Browse business tools and merchant services.'],
-      pay: ['Pay', 'Make quick payments using saved or once-off options.'],
-      transfer: ['Transfer', 'Move money between accounts.'],
-      gift: ['Buy + Gift', 'Purchase vouchers and digital products.'],
-      vouchers: ['Vouchers', 'Access voucher services and balances.'],
-      insure: ['Insure', 'Review cover and insurance products.']
-    };
+        <!-- PROCESS FLOW (VISUAL JOURNEY) -->
+        <div class="process-flow">
+            <span class="flow-step">📄 OUTDATED DOCUMENT</span>
+            <span>→</span>
+            <span class="flow-step">✍️ EXPERT RETYPING</span>
+            <span>→</span>
+            <span class="flow-step">🔍 FINAL AUDIT</span>
+            <span>→</span>
+            <span class="flow-step">📲 CONNECT & SEND (WhatsApp Photo)</span>
+        </div>
 
-    function showScreen(name) {
-      const isHome = name === 'home';
-      const isLogin = name === 'login';
-      const isAccount = name === 'account';
+        <!-- ADVISORY, COMPLIANCE, FINAL DELIVERY DETAILS -->
+        <div style="background: #FFFFFF; border-radius: 20px; padding: 12px 16px; border: 1px solid #EFF3F8; margin: 12px 0;">
+            <p><strong>📌 Start with a photo of your paper CV or job ad.</strong></p>
+            <p><strong>📝 Advisory & Re-drafting:</strong> Complete retyping with expert updates and keyword integration.</p>
+            <p><strong>⚖️ Compliance Verification:</strong> Full quality audit for private sector standards.</p>
+            <p><strong>📎 Final Delivery (Digital PDF Pack):</strong> Get your new, unified CV and reference portfolio.</p>
+        </div>
 
-      homeScreen.classList.toggle('hidden', !isHome);
-      hero.classList.toggle('hidden', !isHome);
-      loginScreen.classList.toggle('hidden', !isLogin);
-      accountScreen.classList.toggle('hidden', !isAccount);
-      bottomNav.classList.toggle('hidden', isLogin);
-      topbar.classList.toggle('hidden', isLogin || isAccount);
-
-      if (isLogin) {
-        passwordInput.focus();
-      }
-    }
-
-    document.querySelectorAll('.tile-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const panelKey = btn.dataset.panel;
-        if (content[panelKey] && infoPanel) {
-          infoPanel.innerHTML = '<div class="panel-title">' + content[panelKey][0] + '</div><div class="panel-text">' + content[panelKey][1] + '</div>';
-        }
-
-        if (btn.dataset.screen === 'login-screen') {
-          passwordInput.value = '';
-          passwordInput.type = 'password';
-          togglePassword.textContent = 'SHOW';
-          showScreen('login');
-        }
-      });
-    });
-
-    togglePassword.addEventListener('click', () => {
-      const visible = passwordInput.type === 'text';
-      passwordInput.type = visible ? 'password' : 'text';
-      togglePassword.textContent = visible ? 'SHOW' : 'HIDE';
-    });
-
-    function goToAccount() {
-      if (!passwordInput.value.trim()) {
-        passwordInput.focus();
-        passwordInput.style.borderBottomColor = '#d9534f';
-        setTimeout(() => {
-          passwordInput.style.borderBottomColor = '#d6d6d6';
-        }, 1200);
-        return;
-      }
-      showScreen('account');
-    }
-
-    loginSubmit.addEventListener('click', goToAccount);
-    passwordInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        goToAccount();
-      }
-    });
-
-    backHome.addEventListener('click', () => {
-      showScreen('home');
-    });
-  </script>
+        <!-- PAYMENT OPTIONS -->
+        <div class="payment-icons">
+            <span>💳 ET</span> <span>🏦 Capitec Pay</span> <span>📱 SnapScan</span> <span>⚡ Zapper</span> <span>🛒 PayShop</span>
+        </div>
+        <div class="footer-note">
+            ⚡ Rapid Turnaround | Secure & compliant | WhatsApp photo → polished PDF in hours
+        </div>
+    </div>
+</div>
 </body>
 </html>
